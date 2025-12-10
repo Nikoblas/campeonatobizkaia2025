@@ -49,6 +49,10 @@ export class CompetitionExplorerComponent {
     this.cargarDatos();
   }
 
+  getCategoriaVisual(categoria: string): string {
+    return this.competitionService.getCategoriaVisual(categoria);
+  }
+
   cargarDatos() {
     const data = this.competitionService.getCompetitionFileData(
       this.concursoSeleccionado,

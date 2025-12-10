@@ -23,7 +23,6 @@ interface CompetitionData {
   nombreJinete: string;
   caballo: string;
   total: number;
-  viernes: CompetitionDay;
   sabado: CompetitionDay;
   domingo: CompetitionDay;
   desempate: CompetitionDay;
@@ -46,36 +45,21 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
   cargando: boolean = false;
   private subscriptions: Subscription[] = [];
 
-  // Estado para categoría EQUIPOS
-  equipos: Array<{
-    equipo: string;
-    jefeEquipo: string;
-    miembros: Array<{
-      licencia: string;
-      nombreJinete: string;
-      categoria: string;
-      caballo: string;
-      puntos: number | string;
-      tiempo: string;
-      validoParaTotal?: boolean;
-      tachado?: boolean;
-    }>;
-    totalPuntos: number | string;
-    totalTiempoSegundos: number;
-    eliminado?: boolean;
-  }> = [];
-
-  // Grupos de categorías compatibles
+  // Grupos de categorías compatibles (ya no aplica con las nuevas categorías)
   private gruposCategorias = {
-    grupo1: ['Adultos', 'Juveniles1'],
-    grupo2: ['Juveniles', 'Veteranos1'],
-    grupo3: ['Alevines', 'Infantiles', 'Veteranos'],
+    grupo1: [],
+    grupo2: [],
+    grupo3: [],
   };
 
   constructor(
     private competitionService: CompetitionService,
     private http: HttpClient
   ) {}
+
+  getCategoriaVisual(categoria: string): string {
+    return this.competitionService.getCategoriaVisual(categoria);
+  }
 
   ngOnInit() {
     this.categorias = this.competitionService.getCategorias();
@@ -177,15 +161,10 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
   }
 
   cargarDatos() {
-    if (this.categoriaSeleccionada === 'EQUIPOS') {
-      this.cargarEquiposDesdeExcel();
-      return;
-    }
     const concurso = 'SEDE';
     const datosConcurso =
       this.competitionService.getAllCompetitionData(concurso);
     const pruebas = [
-      { key: 'viernes', dia: 'VIERNES' },
       { key: 'sabado', dia: 'SABADO' },
       { key: 'domingo', dia: 'DOMINGO' },
       { key: 'desempate', dia: 'DESEMPATE' },
@@ -197,11 +176,11 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
     // Verificar si todos los días principales tienen datos
     const diasConDatos = datosCategoria.filter(
       (d) =>
-        ['VIERNES', 'SABADO', 'DOMINGO'].includes(d.dia) &&
+        ['SABADO', 'DOMINGO'].includes(d.dia) &&
         d.datos &&
         d.datos.length > 0
     ).length;
-    const todosLosDiasCompletos = diasConDatos === 3;
+    const todosLosDiasCompletos = diasConDatos === 2;
 
     const jinetesMap: { [licencia: string]: any } = {};
 
@@ -318,15 +297,14 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
     const listadoJinetes = Object.keys(jinetesMap)
       .map((licencia) => {
         const jinete = jinetesMap[licencia];
-        for (const p of ['viernes', 'sabado', 'domingo', 'desempate']) {
+        for (const p of ['sabado', 'domingo', 'desempate']) {
           if (!jinete[p]) {
             jinete[p] = { puntos: '-', tiempo: '-', caballo: '-', cl: '-' };
           }
         }
 
-        // Verificar que el jinete corrió tanto viernes como sábado
+        // Verificar que el jinete corrió sábado
         // Un jinete ha corrido si tiene datos (incluso con 0 puntos)
-        const corrioViernes = jinete.viernes && jinete.viernes.puntos !== '-';
         const corrioSabado = jinete.sabado && jinete.sabado.puntos !== '-';
 
         // Verificar si existe archivo de domingo para esta categoría
@@ -340,14 +318,14 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
           corrioDomingo = jinete.domingo && jinete.domingo.puntos !== '-';
         }
 
-        // Si no corrió viernes, sábado o domingo (si existe), excluir de la clasificación
-        if (!corrioViernes || !corrioSabado || !corrioDomingo) {
+        // Si no corrió sábado o domingo (si existe), excluir de la clasificación
+        if (!corrioSabado || !corrioDomingo) {
           return null; // Será filtrado después
         }
 
         // Contar eliminaciones (E, EL, ELI, RET, NC) usando puntos originales
         let eliminaciones = 0;
-        for (const p of ['viernes', 'sabado', 'domingo']) {
+        for (const p of ['sabado', 'domingo']) {
           const puntosOriginales = jinete[p]?.puntosOriginal;
           if (
             typeof puntosOriginales === 'string' &&
@@ -372,7 +350,7 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
 
         let total = 0;
         let resultadosValidos = 0;
-        for (const p of ['viernes', 'sabado', 'domingo']) {
+        for (const p of ['sabado', 'domingo']) {
           const puntos = jinete[p]?.puntos;
           if (typeof puntos === 'number') {
             total += puntos;
@@ -391,7 +369,7 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
           total,
           resultadosValidos,
           eliminaciones, // Agregar el contador de eliminaciones
-          resultados: ['viernes', 'sabado', 'domingo'].map(
+          resultados: ['sabado', 'domingo'].map(
             (p) => jinete[p]?.puntos
           ),
         } as any;
@@ -502,13 +480,13 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
           })`
         );
 
-        // Si tenemos información del jinete de viernes, validar consistencia
+        // Si tenemos información del jinete de referencia, validar consistencia
         if (jineteInfo && jineteInfo.nombreJinete) {
-          const nombreJineteViernes = (jineteInfo.nombreJinete + '')
+          const nombreJineteReferencia = (jineteInfo.nombreJinete + '')
             .toString()
             .trim()
             .toUpperCase();
-          const caballoViernes = (jineteInfo.caballo + '')
+          const caballoReferencia = (jineteInfo.caballo + '')
             .toString()
             .trim()
             .toUpperCase();
@@ -516,16 +494,16 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
           // Si el nombre del jinete no coincide, saltar
           if (
             nombreJineteNormalizado &&
-            nombreJineteNormalizado !== nombreJineteViernes
+            nombreJineteNormalizado !== nombreJineteReferencia
           ) {
             continue;
           }
 
           // Si el caballo no coincide, saltar
           if (
-            caballoViernes &&
+            caballoReferencia &&
             nombreCaballoNormalizado &&
-            nombreCaballoNormalizado !== caballoViernes
+            nombreCaballoNormalizado !== caballoReferencia
           ) {
             continue;
           }
@@ -579,217 +557,6 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
     return null;
   }
 
-  private cargarEquiposDesdeExcel() {
-    this.equipos = [];
-    const concurso = 'SEDE';
-    const datosConcurso =
-      this.competitionService.getAllCompetitionData(concurso);
-    this.competitionService.loadEquipos().subscribe({
-      next: (entries) => {
-        const equipoToLicencias: {
-          [nombre: string]: {
-            licencias: { licencia: string }[];
-            jefeEquipo: string;
-          };
-        } = {};
-        for (const e of entries) {
-          if (!equipoToLicencias[e.equipo]) {
-            equipoToLicencias[e.equipo] = {
-              licencias: [],
-              jefeEquipo: e.jefeEquipo,
-            };
-          }
-          equipoToLicencias[e.equipo].licencias.push({
-            licencia: e.licencia,
-          });
-        }
-
-        const equiposResultado: any[] = [];
-        for (const equipoNombre of Object.keys(equipoToLicencias)) {
-          const equipoData = equipoToLicencias[equipoNombre];
-          const licencias = equipoData.licencias;
-          const jefeEquipo = equipoData.jefeEquipo;
-          const miembros: any[] = [];
-
-          // Obtener datos del viernes para nombres y categorías
-          const datosViernes = datosConcurso.filter((d) => d.dia === 'VIERNES');
-          const datosSabado = datosConcurso.filter((d) => d.dia === 'SABADO');
-
-          for (const licenciaData of licencias) {
-            const licencia = licenciaData.licencia;
-
-            let nombreJinete: string = '';
-            let categoria: string = '';
-            let caballo: string = '';
-            let puntos: number | string = '-';
-            let tiempo: string = '0';
-
-            // Buscar en viernes para obtener nombre, categoría y caballo
-            const resultadoViernes = this.buscarJineteEnDatos(
-              licencia,
-              datosConcurso,
-              'VIERNES'
-            );
-            if (resultadoViernes) {
-              const { fila, prueba } = resultadoViernes;
-              nombreJinete =
-                fila['Atleta'] || fila['Jinete'] || fila['NOMBRE JINETE'] || '';
-              categoria = prueba.categoria;
-              caballo =
-                fila['Caballo'] ||
-                fila['CABALLO'] ||
-                fila['caballo'] ||
-                fila['Cab'] ||
-                fila['CAB'] ||
-                fila['cab'] ||
-                '';
-            } else {
-              // No se encontró jinete en viernes
-              console.log(
-                `❌ NO ENCONTRADO: Licencia: ${licencia} - No se encontró jinete para VIERNES`
-              );
-            }
-
-            // Buscar en sábado usando la búsqueda normal por licencia del jinete
-            const jineteInfo = { nombreJinete, caballo };
-            const resultadoSabado = this.buscarJineteEnDatos(
-              licencia,
-              datosConcurso,
-              'SABADO',
-              jineteInfo
-            );
-
-            if (resultadoSabado) {
-              const { fila } = resultadoSabado;
-              const puntosOriginal = fila['Faltas'] ?? fila['Puntos'];
-              const esEliminacion =
-                puntosOriginal &&
-                ['EL', 'E', 'R', 'ELI', 'RET', 'NC'].includes(
-                  ('' + puntosOriginal).toUpperCase()
-                );
-
-              if (esEliminacion) {
-                // Para eliminaciones, usar 0 puntos (empate)
-                (puntos = 'E'), 'R';
-              } else {
-                // Para puntos normales
-                const puntosNum =
-                  typeof puntosOriginal === 'number'
-                    ? puntosOriginal
-                    : typeof puntosOriginal === 'string' &&
-                      !isNaN(Number(puntosOriginal))
-                    ? Number(puntosOriginal)
-                    : puntosOriginal;
-                puntos = puntosNum ?? 0; // Si no hay resultado, usar 0
-              }
-
-              tiempo = fila['Tiempo'] ?? fila['TIempo'] ?? '0'; // Si no hay tiempo, usar 0
-            } else {
-              // No se encontró resultado para sábado
-              console.log(
-                `❌ NO ENCONTRADO: ${nombreJinete} (${categoria}) - Licencia: ${licencia} - Caballo: ${caballo} - No se encontró resultado para SÁBADO`
-              );
-            }
-
-            // Para equipos, incluir todos los miembros que tengan datos básicos
-            if (nombreJinete && categoria) {
-              // Guardar los puntos originales (sin procesar eliminados)
-              miembros.push({
-                licencia,
-                nombreJinete,
-                categoria,
-                caballo,
-                puntos: puntos, // Puntos originales
-                tiempo,
-              });
-              console.log(
-                `✅ Miembro agregado: ${nombreJinete} (${categoria}) - Puntos: ${puntos}`
-              );
-            } else {
-              console.log(
-                `❌ Miembro NO agregado: licencia=${licencia}, nombreJinete="${nombreJinete}", categoria="${categoria}" - Faltan datos básicos`
-              );
-            }
-          }
-
-          console.log(
-            `Equipo ${equipoNombre}: Total miembros encontrados = ${miembros.length}`
-          );
-
-          // Aplicar las nuevas reglas de procesamiento de miembros
-          this.procesarMiembrosEquipo(miembros);
-
-          // Procesar puntos eliminados SOLO para los miembros seleccionados
-          miembros.forEach((miembro) => {
-            if (miembro.validoParaTotal) {
-              const puntosOriginales = miembro.puntos;
-              const puntosFinales = this.procesarPuntosEliminado(
-                puntosOriginales,
-                miembro.licencia,
-                datosConcurso,
-                miembro.categoria
-              );
-              miembro.puntos = puntosFinales;
-            }
-          });
-
-          // Verificar si el equipo está eliminado (algún miembro válido seleccionado tiene resultado 'E','R')
-          const equipoEliminado =
-            this.verificarEliminacionEquipoSeleccionados(miembros);
-
-          // Calcular totales solo con los miembros válidos
-          let totalPuntos: number | string = 0;
-          let totalTiempoSegundos = 0;
-
-          if (equipoEliminado) {
-            // Equipo eliminado: usar "ELI" como puntos y no calcular tiempo
-            totalPuntos = 'ELI';
-            totalTiempoSegundos = 0;
-          } else {
-            // Equipo normal: calcular puntos y tiempo normalmente
-            for (const r of miembros) {
-              if (r.validoParaTotal) {
-                const p =
-                  typeof r.puntos === 'number' ? r.puntos : Number(r.puntos);
-                if (!isNaN(p)) totalPuntos += p;
-                const seg = this.convertirTiempoASegundos(r.tiempo);
-                if (!isNaN(seg)) totalTiempoSegundos += seg;
-              }
-            }
-          }
-
-          equiposResultado.push({
-            equipo: equipoNombre,
-            jefeEquipo: jefeEquipo,
-            miembros,
-            totalPuntos,
-            totalTiempoSegundos,
-            eliminado: equipoEliminado,
-          });
-        }
-
-        equiposResultado.sort((a, b) => {
-          // Los equipos eliminados van al final
-          if (a.eliminado && !b.eliminado) return 1;
-          if (!a.eliminado && b.eliminado) return -1;
-          if (a.eliminado && b.eliminado) return 0; // Ambos eliminados, mantener orden original
-
-          // Para equipos no eliminados, ordenar por puntos totales (menor es mejor)
-          if (a.totalPuntos !== b.totalPuntos) {
-            return a.totalPuntos - b.totalPuntos;
-          }
-          // En caso de empate, ordenar por tiempo total (menor es mejor)
-          return a.totalTiempoSegundos - b.totalTiempoSegundos;
-        });
-
-        this.equipos = equiposResultado;
-      },
-      error: (err) => {
-        console.error('Error cargando equipos:', err);
-        this.equipos = [];
-      },
-    });
-  }
 
   getTooltipText(competitionDay: CompetitionDay): string {
     if (
@@ -1121,7 +888,7 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
     const categoriaNormalizada = categoria.trim().toUpperCase();
 
     for (const [grupo, categorias] of Object.entries(this.gruposCategorias)) {
-      for (const cat of categorias) {
+      for (const cat of categorias as string[]) {
         const catNormalizada = cat.trim().toUpperCase();
         if (categoriaNormalizada === catNormalizada) {
           return grupo;
@@ -1141,493 +908,6 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
     return grupo1 !== null && grupo1 === grupo2;
   }
 
-  /**
-   * Procesa los miembros de un equipo aplicando las reglas de categorías
-   */
-  private procesarMiembrosEquipo(miembros: any[]): any[] {
-    // Inicializar todos los miembros
-    miembros.forEach((miembro, index) => {
-      miembro.validoParaTotal = false;
-      miembro.tachado = true;
-    });
-
-    if (miembros.length <= 3) {
-      // Si hay 3 o menos miembros, todos son válidos y no se tacha ninguno
-      miembros.forEach((miembro, index) => {
-        miembro.validoParaTotal = true;
-        miembro.tachado = false;
-      });
-      return miembros;
-    }
-
-    // Aplicar reglas de tachado para más de 3 miembros
-
-    // Crear mapa de grupos y sus miembros
-    const gruposMap = new Map<string, any[]>();
-    miembros.forEach((miembro) => {
-      const grupo = this.obtenerGrupoCategoria(miembro.categoria);
-
-      if (grupo) {
-        if (!gruposMap.has(grupo)) {
-          gruposMap.set(grupo, []);
-        }
-        gruposMap.get(grupo)!.push(miembro);
-      } else {
-        // Si no pertenece a ningún grupo, crear un grupo individual
-        const grupoIndividual = `individual_${miembro.categoria}`;
-        if (!gruposMap.has(grupoIndividual)) {
-          gruposMap.set(grupoIndividual, []);
-        }
-        gruposMap.get(grupoIndividual)!.push(miembro);
-      }
-    });
-
-    // Encontrar grupos con más de un miembro
-    const gruposConMultiplesMiembros = Array.from(gruposMap.entries()).filter(
-      ([_, miembrosGrupo]) => miembrosGrupo.length > 1
-    );
-
-    if (gruposConMultiplesMiembros.length > 0) {
-      // Hay grupos con múltiples miembros, procesarlos
-      this.procesarGruposConMultiplesMiembros(
-        miembros,
-        gruposConMultiplesMiembros
-      );
-    } else {
-      // No hay grupos con múltiples miembros, seleccionar los 3 mejores
-      this.seleccionarMejoresTres(miembros);
-    }
-
-    return miembros;
-  }
-
-  /**
-   * Verifica si un valor indica eliminación
-   */
-  private esEliminado(valor: any): boolean {
-    return (
-      typeof valor === 'string' &&
-      ['E', 'R', 'EL', 'ELI', 'RET'].includes(valor.toUpperCase())
-    );
-  }
-
-  /**
-   * Verifica si un equipo está eliminado (algún miembro válido seleccionado tiene resultado 'E','R' en puntos o tiempo)
-   */
-  private verificarEliminacionEquipoSeleccionados(miembros: any[]): boolean {
-    return miembros.some((miembro) => {
-      if (!miembro.validoParaTotal) return false;
-
-      const puntos = miembro.puntos;
-      const tiempo = miembro.tiempo;
-
-      // PRIORIDAD: Verificar primero el tiempo, luego los puntos
-      const eliminadoEnTiempo = this.esEliminado(tiempo);
-      const eliminadoEnPuntos = this.esEliminado(puntos);
-
-      return eliminadoEnTiempo || eliminadoEnPuntos;
-    });
-  }
-
-  /**
-   * Verifica si un equipo está eliminado (algún miembro válido tiene resultado 'E','R' en puntos o tiempo)
-   * @deprecated Usar verificarEliminacionEquipoSeleccionados en su lugar
-   */
-  private verificarEliminacionEquipo(miembros: any[]): boolean {
-    return this.verificarEliminacionEquipoSeleccionados(miembros);
-  }
-
-  /**
-   * Verifica si hay grupos compatibles en los miembros
-   */
-  private verificarGruposCompatibles(miembros: any[]): any[] {
-    const gruposMap = new Map<string, any[]>();
-
-    miembros.forEach((miembro) => {
-      const grupo = this.obtenerGrupoCategoria(miembro.categoria);
-      if (grupo) {
-        if (!gruposMap.has(grupo)) {
-          gruposMap.set(grupo, []);
-        }
-        gruposMap.get(grupo)!.push(miembro);
-      }
-    });
-
-    // Retornar grupos que tienen más de un miembro
-    return Array.from(gruposMap.entries()).filter(
-      ([_, miembros]) => miembros.length > 1
-    );
-  }
-
-  /**
-   * Selecciona los 3 mejores miembros cuando no hay duplicados ni grupos compatibles
-   */
-  private seleccionarMejoresTres(miembros: any[]): void {
-    // Marcar todos como no válidos inicialmente
-    miembros.forEach((miembro) => {
-      miembro.validoParaTotal = false;
-      miembro.tachado = true;
-    });
-
-    // Ordenar por puntos (menor es mejor) y luego por tiempo (menor es mejor)
-    const miembrosOrdenados = [...miembros].sort((a, b) => {
-      const puntosA =
-        typeof a.puntos === 'number' ? a.puntos : Number(a.puntos);
-      const puntosB =
-        typeof b.puntos === 'number' ? b.puntos : Number(b.puntos);
-
-      if (puntosA !== puntosB) {
-        return puntosA - puntosB;
-      }
-
-      const tiempoA = this.convertirTiempoASegundos(a.tiempo);
-      const tiempoB = this.convertirTiempoASegundos(b.tiempo);
-      return tiempoA - tiempoB;
-    });
-
-    // Seleccionar los 3 mejores
-    const seleccionados = miembrosOrdenados.slice(0, 3);
-    seleccionados.forEach((miembro) => {
-      miembro.validoParaTotal = true;
-      miembro.tachado = false;
-    });
-  }
-
-  /**
-   * Procesa grupos con múltiples miembros (unifica categorías duplicadas y grupos compatibles)
-   */
-  private procesarGruposConMultiplesMiembros(
-    miembros: any[],
-    gruposConMultiplesMiembros: [string, any[]][]
-  ): void {
-    // Marcar todos como no válidos inicialmente
-    miembros.forEach((miembro) => {
-      miembro.validoParaTotal = false;
-      miembro.tachado = true;
-    });
-
-    // Para cada grupo con múltiples miembros, seleccionar el mejor resultado
-    const miembrosSeleccionados: any[] = [];
-
-    for (const [grupo, miembrosGrupo] of gruposConMultiplesMiembros) {
-      // Ordenar TODOS los miembros: válidos primero, eliminados después
-      miembrosGrupo.sort((a, b) => {
-        // Primero verificar si alguno está eliminado
-        const aEliminado =
-          this.esEliminado(a.tiempo) || this.esEliminado(a.puntos);
-        const bEliminado =
-          this.esEliminado(b.tiempo) || this.esEliminado(b.puntos);
-
-        // Si uno está eliminado y el otro no, el no eliminado va primero
-        if (aEliminado && !bEliminado) return 1;
-        if (!aEliminado && bEliminado) return -1;
-
-        // Si ambos están eliminados o ambos son válidos, ordenar por puntos y tiempo
-        const puntosA =
-          typeof a.puntos === 'number' ? a.puntos : Number(a.puntos);
-        const puntosB =
-          typeof b.puntos === 'number' ? b.puntos : Number(b.puntos);
-
-        if (puntosA !== puntosB) {
-          return puntosA - puntosB;
-        }
-
-        const tiempoA = this.convertirTiempoASegundos(a.tiempo);
-        const tiempoB = this.convertirTiempoASegundos(b.tiempo);
-        return tiempoA - tiempoB;
-      });
-
-      // Seleccionar el primero (mejor) de la lista ordenada
-      const mejor = miembrosGrupo[0];
-      const esEliminado =
-        this.esEliminado(mejor.tiempo) || this.esEliminado(mejor.puntos);
-
-      // Marcar el seleccionado como válido
-      mejor.validoParaTotal = true;
-      mejor.tachado = false;
-      miembrosSeleccionados.push(mejor);
-
-      // Tachar todos los demás de este grupo
-      for (const miembro of miembrosGrupo) {
-        if (miembro !== mejor) {
-          miembro.validoParaTotal = false;
-          miembro.tachado = true;
-        }
-      }
-    }
-
-    // Agregar miembros de grupos únicos (con un solo miembro)
-    miembros.forEach((miembro) => {
-      if (!miembro.tachado) return; // Ya procesado
-
-      const grupo = this.obtenerGrupoCategoria(miembro.categoria);
-      const grupoKey = grupo || `individual_${miembro.categoria}`;
-
-      // Verificar si este grupo ya fue procesado (tenía múltiples miembros)
-      const esGrupoProcesado = gruposConMultiplesMiembros.some(
-        ([grupoNombre, _]) => grupoNombre === grupoKey
-      );
-
-      if (!esGrupoProcesado) {
-        miembro.validoParaTotal = true;
-        miembro.tachado = false;
-        miembrosSeleccionados.push(miembro);
-      }
-    });
-
-    // Si tenemos menos de 3 miembros válidos, agregar los mejores de los tachados
-    if (miembrosSeleccionados.length < 3) {
-      const miembrosTachados = miembros.filter((m) => m.tachado);
-      miembrosTachados.sort((a, b) => {
-        const puntosA =
-          typeof a.puntos === 'number' ? a.puntos : Number(a.puntos);
-        const puntosB =
-          typeof b.puntos === 'number' ? b.puntos : Number(b.puntos);
-
-        if (puntosA !== puntosB) {
-          return puntosA - puntosB;
-        }
-
-        const tiempoA = this.convertirTiempoASegundos(a.tiempo);
-        const tiempoB = this.convertirTiempoASegundos(b.tiempo);
-        return tiempoA - tiempoB;
-      });
-
-      const necesarios = Math.min(
-        3 - miembrosSeleccionados.length,
-        miembrosTachados.length
-      );
-
-      for (let i = 0; i < necesarios; i++) {
-        miembrosTachados[i].validoParaTotal = true;
-        miembrosTachados[i].tachado = false;
-      }
-    }
-  }
-
-  /**
-   * Procesa equipos con categorías duplicadas (DEPRECATED - usar procesarGruposConMultiplesMiembros)
-   */
-  private procesarCategoriasDuplicadas(
-    miembros: any[],
-    categoriasDuplicadas: [string, any[]][]
-  ): void {
-    // Marcar todos como no válidos inicialmente
-    miembros.forEach((miembro) => {
-      miembro.validoParaTotal = false;
-      miembro.tachado = true;
-    });
-
-    // Para cada categoría duplicada, seleccionar el mejor resultado
-    const miembrosSeleccionados: any[] = [];
-
-    for (const [categoria, miembrosCategoria] of categoriasDuplicadas) {
-      miembrosCategoria.forEach((m, i) => {
-        const esElimTiempo = this.esEliminado(m.tiempo);
-        const esElimPuntos = this.esEliminado(m.puntos);
-        const esElim = esElimTiempo || esElimPuntos;
-      });
-
-      // Ordenar TODOS los miembros: válidos primero, eliminados después
-      miembrosCategoria.sort((a, b) => {
-        // Primero verificar si alguno está eliminado
-        const aEliminado =
-          this.esEliminado(a.tiempo) || this.esEliminado(a.puntos);
-        const bEliminado =
-          this.esEliminado(b.tiempo) || this.esEliminado(b.puntos);
-
-        // Si uno está eliminado y el otro no, el no eliminado va primero
-        if (aEliminado && !bEliminado) return 1;
-        if (!aEliminado && bEliminado) return -1;
-
-        // Si ambos están eliminados o ambos son válidos, ordenar por puntos y tiempo
-        const puntosA =
-          typeof a.puntos === 'number' ? a.puntos : Number(a.puntos);
-        const puntosB =
-          typeof b.puntos === 'number' ? b.puntos : Number(b.puntos);
-
-        if (puntosA !== puntosB) {
-          return puntosA - puntosB;
-        }
-
-        const tiempoA = this.convertirTiempoASegundos(a.tiempo);
-        const tiempoB = this.convertirTiempoASegundos(b.tiempo);
-        return tiempoA - tiempoB;
-      });
-
-      // Seleccionar el primero (mejor) de la lista ordenada
-      const mejor = miembrosCategoria[0];
-      const esEliminado =
-        this.esEliminado(mejor.tiempo) || this.esEliminado(mejor.puntos);
-
-      console.log(
-        `[CATEGORÍA ${categoria}] Miembro seleccionado: ${mejor.nombreJinete} - Puntos: ${mejor.puntos}, Tiempo: ${mejor.tiempo}`
-      );
-
-      // Mostrar comparación si hay más de un miembro
-      if (miembrosCategoria.length > 1) {
-        console.log(
-          `[CATEGORÍA ${categoria}] Comparación realizada entre ${miembrosCategoria.length} miembros:`
-        );
-        for (let i = 0; i < miembrosCategoria.length; i++) {
-          const m = miembrosCategoria[i];
-          const status = i === 0 ? '✅ SELECCIONADO' : '❌ DESCARTADO';
-          console.log(
-            `  ${status}: ${m.nombreJinete} - Puntos: ${m.puntos}, Tiempo: ${m.tiempo}`
-          );
-        }
-      }
-
-      // Marcar el seleccionado como válido
-      mejor.validoParaTotal = true;
-      mejor.tachado = false;
-      miembrosSeleccionados.push(mejor);
-
-      // Tachar todos los demás de esta categoría
-      for (const miembro of miembrosCategoria) {
-        if (miembro !== mejor) {
-          miembro.validoParaTotal = false;
-          miembro.tachado = true;
-        }
-      }
-    }
-
-    // Agregar miembros de categorías únicas
-    miembros.forEach((miembro) => {
-      if (!miembro.tachado) return; // Ya procesado
-
-      const categoria = miembro.categoria;
-      const esDuplicada = categoriasDuplicadas.some(
-        ([cat, _]) => cat === categoria
-      );
-
-      if (!esDuplicada) {
-        miembro.validoParaTotal = true;
-        miembro.tachado = false;
-        miembrosSeleccionados.push(miembro);
-      }
-    });
-
-    // Si tenemos menos de 3 miembros válidos, agregar los mejores de los tachados
-    if (miembrosSeleccionados.length < 3) {
-      const miembrosTachados = miembros.filter((m) => m.tachado);
-      miembrosTachados.sort((a, b) => {
-        const puntosA =
-          typeof a.puntos === 'number' ? a.puntos : Number(a.puntos);
-        const puntosB =
-          typeof b.puntos === 'number' ? b.puntos : Number(b.puntos);
-
-        if (puntosA !== puntosB) {
-          return puntosA - puntosB;
-        }
-
-        const tiempoA = this.convertirTiempoASegundos(a.tiempo);
-        const tiempoB = this.convertirTiempoASegundos(b.tiempo);
-        return tiempoA - tiempoB;
-      });
-
-      const necesarios = Math.min(
-        3 - miembrosSeleccionados.length,
-        miembrosTachados.length
-      );
-      for (let i = 0; i < necesarios; i++) {
-        miembrosTachados[i].validoParaTotal = true;
-        miembrosTachados[i].tachado = false;
-      }
-    }
-  }
-
-  /**
-   * Procesa equipos con categorías diferentes pero grupos compatibles
-   */
-  private procesarGruposCompatibles(miembros: any[]): void {
-    // Crear mapa de grupos
-    const gruposMap = new Map<string, any[]>();
-    miembros.forEach((miembro) => {
-      const grupo = this.obtenerGrupoCategoria(miembro.categoria);
-      if (grupo) {
-        if (!gruposMap.has(grupo)) {
-          gruposMap.set(grupo, []);
-        }
-        gruposMap.get(grupo)!.push(miembro);
-      }
-    });
-
-    // Marcar todos como no válidos inicialmente
-    miembros.forEach((miembro) => {
-      miembro.validoParaTotal = false;
-      miembro.tachado = true;
-    });
-
-    const miembrosSeleccionados: any[] = [];
-
-    // Para cada grupo, seleccionar el mejor miembro
-    for (const [grupo, miembrosGrupo] of gruposMap) {
-      if (miembrosGrupo.length > 1) {
-        // Ordenar por puntos y tiempo
-        miembrosGrupo.sort((a, b) => {
-          const puntosA =
-            typeof a.puntos === 'number' ? a.puntos : Number(a.puntos);
-          const puntosB =
-            typeof b.puntos === 'number' ? b.puntos : Number(b.puntos);
-
-          if (puntosA !== puntosB) {
-            return puntosA - puntosB;
-          }
-
-          const tiempoA = this.convertirTiempoASegundos(a.tiempo);
-          const tiempoB = this.convertirTiempoASegundos(b.tiempo);
-          return tiempoA - tiempoB;
-        });
-
-        // El mejor del grupo es válido
-        const mejor = miembrosGrupo[0];
-        mejor.validoParaTotal = true;
-        mejor.tachado = false;
-        miembrosSeleccionados.push(mejor);
-
-        // Los demás del grupo se tachan
-        for (let i = 1; i < miembrosGrupo.length; i++) {
-          miembrosGrupo[i].validoParaTotal = false;
-          miembrosGrupo[i].tachado = true;
-        }
-      } else {
-        // Solo un miembro en el grupo, es válido
-        const miembro = miembrosGrupo[0];
-        miembro.validoParaTotal = true;
-        miembro.tachado = false;
-        miembrosSeleccionados.push(miembro);
-      }
-    }
-
-    // Si tenemos menos de 3 miembros válidos, agregar los mejores de los tachados
-    if (miembrosSeleccionados.length < 3) {
-      const miembrosTachados = miembros.filter((m) => m.tachado);
-      miembrosTachados.sort((a, b) => {
-        const puntosA =
-          typeof a.puntos === 'number' ? a.puntos : Number(a.puntos);
-        const puntosB =
-          typeof b.puntos === 'number' ? b.puntos : Number(b.puntos);
-
-        if (puntosA !== puntosB) {
-          return puntosA - puntosB;
-        }
-
-        const tiempoA = this.convertirTiempoASegundos(a.tiempo);
-        const tiempoB = this.convertirTiempoASegundos(b.tiempo);
-        return tiempoA - tiempoB;
-      });
-
-      const necesarios = Math.min(
-        3 - miembrosSeleccionados.length,
-        miembrosTachados.length
-      );
-      for (let i = 0; i < necesarios; i++) {
-        miembrosTachados[i].validoParaTotal = true;
-        miembrosTachados[i].tachado = false;
-      }
-    }
-  }
 
   // Métodos de descarga Excel
   descargarExcelIndividual() {
@@ -1640,9 +920,6 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
       Clasificación: dato.mostrarClasificacion ? dato.clasificacion : '',
       Jinete: dato.nombreJinete,
       Total: dato.total,
-      'Viernes Puntos': dato.viernes.puntos,
-      'Viernes Tiempo': dato.viernes.tiempo,
-      'Viernes Caballo': dato.viernes.caballo,
       'Sábado Puntos': dato.sabado.puntos,
       'Sábado Tiempo': dato.sabado.tiempo,
       'Sábado Caballo': dato.sabado.caballo,
@@ -1665,280 +942,6 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
     XLSX.writeFile(wb, nombreArchivo);
   }
 
-  descargarExcelEquipos() {
-    if (this.equipos.length === 0) {
-      alert('No hay datos de equipos para descargar');
-      return;
-    }
-
-    // Crear datos detallados para cada equipo
-    const datosExcel = this.equipos.map((equipo, index) => {
-      const baseData = {
-        Clasificación: index + 1,
-        Equipo: equipo.equipo,
-        'Jefe de Equipo': equipo.jefeEquipo,
-        'Total Puntos': equipo.totalPuntos,
-        'Tiempo Total (s)': equipo.totalTiempoSegundos,
-      };
-
-      // Agregar información de cada miembro
-      const miembrosData: any = {};
-      equipo.miembros.forEach((miembro, idx) => {
-        const num = idx + 1;
-        const estado = miembro.tachado
-          ? ' (TACHADO)'
-          : miembro.validoParaTotal
-          ? ' (VÁLIDO)'
-          : '';
-        miembrosData[`Miembro ${num}`] = `${miembro.nombreJinete}${estado}`;
-        miembrosData[`Licencia ${num}`] = miembro.licencia;
-        miembrosData[`Categoría ${num}`] = miembro.categoria;
-        miembrosData[`Caballo ${num}`] = miembro.caballo;
-        miembrosData[`Puntos ${num}`] = miembro.puntos;
-        miembrosData[`Tiempo ${num}`] = miembro.tiempo;
-        miembrosData[`Válido para Total ${num}`] = miembro.validoParaTotal
-          ? 'SÍ'
-          : 'NO';
-      });
-
-      return { ...baseData, ...miembrosData };
-    });
-
-    const ws = XLSX.utils.json_to_sheet(datosExcel);
-
-    // Ajustar ancho de columnas
-    const colWidths = [
-      { wch: 8 }, // Clasificación
-      { wch: 20 }, // Equipo
-      { wch: 20 }, // Jefe de Equipo
-      { wch: 12 }, // Total Puntos
-      { wch: 15 }, // Tiempo Total
-    ];
-
-    // Añadir anchos para las columnas de miembros (4 miembros x 7 campos = 28 columnas)
-    for (let i = 0; i < 4; i++) {
-      colWidths.push(
-        { wch: 20 }, // Miembro
-        { wch: 15 }, // Licencia
-        { wch: 12 }, // Categoría
-        { wch: 15 }, // Caballo
-        { wch: 8 }, // Puntos
-        { wch: 10 }, // Tiempo
-        { wch: 12 } // Válido para Total
-      );
-    }
-
-    ws['!cols'] = colWidths;
-
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Clasificación Equipos');
-
-    const nombreArchivo = `Clasificacion_Equipos_${
-      new Date().toISOString().split('T')[0]
-    }.xlsx`;
-    XLSX.writeFile(wb, nombreArchivo);
-  }
-
-  imprimirEquipos() {
-    if (this.equipos.length === 0) {
-      alert('No hay datos de equipos para imprimir');
-      return;
-    }
-
-    // Crear ventana de impresión
-    const ventanaImpresion = window.open('', '_blank');
-    if (!ventanaImpresion) {
-      alert(
-        'No se pudo abrir la ventana de impresión. Verifica que los popups estén permitidos.'
-      );
-      return;
-    }
-
-    // Generar HTML para la impresión
-    const htmlImpresion = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title>Clasificación por Equipos - Campeonato 2025</title>
-        <style>
-          body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            color: #333;
-          }
-          .header {
-            text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #2c3e50;
-            padding-bottom: 20px;
-          }
-          .header h1 {
-            color: #2c3e50;
-            margin: 0;
-            font-size: 24px;
-          }
-          .header h2 {
-            color: #7f8c8d;
-            margin: 10px 0 0 0;
-            font-size: 18px;
-          }
-          .equipos-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-          }
-          .equipo-card {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
-            background: #f9f9f9;
-            page-break-inside: avoid;
-          }
-          .equipo-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #ddd;
-          }
-          .equipo-clasificacion {
-            font-size: 24px;
-            font-weight: bold;
-            color: #2c3e50;
-            min-width: 40px;
-          }
-          .equipo-info h3 {
-            margin: 0;
-            color: #2c3e50;
-            font-size: 18px;
-          }
-          .equipo-totales {
-            text-align: right;
-          }
-          .total-puntos {
-            font-size: 16px;
-            font-weight: bold;
-            color: #27ae60;
-          }
-          .total-tiempo {
-            font-size: 14px;
-            color: #7f8c8d;
-          }
-          .equipo-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-          }
-          .equipo-table th,
-          .equipo-table td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-          }
-          .equipo-table th {
-            background-color: #2c3e50;
-            color: white;
-            font-weight: bold;
-          }
-          .equipo-table tr:nth-child(even) {
-            background-color: #f2f2f2;
-          }
-          .tachado {
-            text-decoration: line-through;
-            color: #999;
-            background-color: #f5f5f5;
-          }
-          .top-1 .equipo-clasificacion {
-            color: #ffd700;
-          }
-          .top-2 .equipo-clasificacion {
-            color: #c0c0c0;
-          }
-          .top-3 .equipo-clasificacion {
-            color: #cd7f32;
-          }
-          @media print {
-            body { margin: 0; }
-            .equipo-card { page-break-inside: avoid; }
-          }
-        </style>
-      </head>
-      <body>
-        <div class="header">
-          <h1>Campeonato 2025</h1>
-          <h2>Clasificación por Equipos</h2>
-          <p>Fecha: ${new Date().toLocaleDateString('es-ES')}</p>
-        </div>
-        <div class="equipos-container">
-          ${this.equipos
-            .map(
-              (eq, idx) => `
-            <div class="equipo-card ${
-              idx === 0
-                ? 'top-1'
-                : idx === 1
-                ? 'top-2'
-                : idx === 2
-                ? 'top-3'
-                : ''
-            }">
-              <div class="equipo-header">
-                <div class="equipo-clasificacion">${idx + 1}</div>
-                <div class="equipo-info">
-                  <h3>${eq.equipo.toUpperCase()} / ${eq.jefeEquipo.toUpperCase()}</h3>
-                </div>
-                <div class="equipo-totales">
-                  <div class="total-puntos">${eq.totalPuntos} pts</div>
-                  <div class="total-tiempo">${eq.totalTiempoSegundos.toFixed(
-                    2
-                  )}s</div>
-                </div>
-              </div>
-              <table class="equipo-table">
-                <thead>
-                  <tr>
-                    <th>Jinete</th>
-                    <th>Categoría</th>
-                    <th>Caballo</th>
-                    <th>Puntos</th>
-                    <th>Tiempo</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${eq.miembros
-                    .map(
-                      (miembro) => `
-                    <tr class="${miembro.tachado ? 'tachado' : ''}">
-                      <td>${miembro.nombreJinete.toUpperCase()}</td>
-                      <td>${miembro.categoria}</td>
-                      <td>${miembro.caballo.toUpperCase()}</td>
-                      <td>${miembro.puntos}</td>
-                      <td>${miembro.tiempo}</td>
-                    </tr>
-                  `
-                    )
-                    .join('')}
-                </tbody>
-              </table>
-            </div>
-          `
-            )
-            .join('')}
-        </div>
-      </body>
-      </html>
-    `;
-
-    ventanaImpresion.document.write(htmlImpresion);
-    ventanaImpresion.document.close();
-
-    // Esperar a que se cargue el contenido y luego imprimir
-    ventanaImpresion.onload = () => {
-      ventanaImpresion.focus();
-      ventanaImpresion.print();
-    };
-  }
 
   imprimirIndividual() {
     const ventanaImpresion = window.open('', '_blank');
@@ -2025,7 +1028,7 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
       </head>
       <body>
         <div class="header">
-          <h1>Campeonato 2025</h1>
+          <h1>Campeonato de Bizkaia de Salto 2025</h1>
           <h2>Clasificación ${this.categoriaSeleccionada}</h2>
           <p>Fecha: ${new Date().toLocaleDateString('es-ES')}</p>
         </div>
@@ -2036,7 +1039,6 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
               <th>Jinete</th>
               <th>Caballo</th>
               <th class="total-column">Total</th>
-              <th>Viernes</th>
               <th>Sábado</th>
               <th>Domingo</th>
               <th>Desempate</th>
@@ -2058,14 +1060,6 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
                 </td>
                 <td>${dato.caballo.toUpperCase()}</td>
                 <td class="total-column">${dato.total}</td>
-                <td>
-                  ${
-                    dato.viernes?.puntos !== undefined &&
-                    dato.viernes?.puntos !== null
-                      ? dato.viernes.puntos
-                      : '-'
-                  }
-                </td>
                 <td>
                   ${
                     dato.sabado?.puntos !== undefined &&

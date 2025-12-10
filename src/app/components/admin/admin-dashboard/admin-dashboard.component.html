@@ -38,7 +38,7 @@
     <!-- Descarga por categoría (unificado) -->
     <div class="categorias-actions">
       <div class="categoria-action" *ngFor="let cat of categorias">
-        <span class="cat-name">{{ cat }}</span>
+        <span class="cat-name">{{ getCategoriaVisual(cat) }}</span>
         <div class="action-buttons">
           <button class="export-excel-btn" (click)="exportarClasificacion('SEDE', cat)" title="Descargar categoría unificada">
             ⬇️ Descargar categoría
@@ -58,7 +58,7 @@
           <div class="categorias-list">
             <div class="categoria-item" *ngFor="let categoria of categorias">
               <div class="categoria-header">
-                <span>{{ categoria }}</span>
+                <span>{{ getCategoriaVisual(categoria) }}</span>
                 <div class="categoria-actions" *ngIf="!hasData(concurso, dia, categoria)">
                   <button
                     class="template-btn"
@@ -183,7 +183,7 @@
             <tr *ngFor="let resultado of resultadosBusqueda">
               <td>{{ resultado.concurso }}</td>
               <td>{{ resultado.dia }}</td>
-              <td>{{ resultado.categoria }}m</td>
+              <td>{{ getCategoriaVisual(resultado.categoria) }}</td>
               <td>{{ resultado.nombre }}</td>
               <td>{{ resultado.licencia }}</td>
               <td>{{ resultado.caballo }}</td>

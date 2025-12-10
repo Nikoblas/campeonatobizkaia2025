@@ -48,20 +48,13 @@ interface ResultadoDia {
 export class CompetitionService {
   private readonly concursos = ['SEDE'];
   private readonly categorias = [
-    'EQUIPOS',
-    'ALEVINES',
-    'VETERANOS',
-    'INFANTILES',
-    'JUVENILES',
-    'JUVENILES1',
-    'VETERANOS1',
-    'ADULTOS',
-    'DEBUTANTES',
-    'CRITERIUM1',
-    'CRITERIUM2',
-    'CRITERIUM3',
+    '080',
+    '100',
+    '110',
+    '120',
+    '130',
   ];
-  private readonly dias = ['VIERNES', 'SABADO', 'DOMINGO', 'DESEMPATE'];
+  private readonly dias = ['SABADO', 'DOMINGO', 'DESEMPATE'];
 
   private datosMemoria: { [concurso: string]: CompetitionFileData[] } = {};
   private faltantesMemoria: { [concurso: string]: string[] } = {};
@@ -83,6 +76,19 @@ export class CompetitionService {
 
   getDias(): string[] {
     return this.dias;
+  }
+
+  /**
+   * Convierte una categoría interna (ej: '080') a formato visual (ej: '0,80m')
+   */
+  getCategoriaVisual(categoria: string): string {
+    // Convertir '080' a '0,80m', '100' a '1,00m', etc.
+    if (categoria.length === 3 && /^\d{3}$/.test(categoria)) {
+      const metros = categoria.substring(0, 1);
+      const centimetros = categoria.substring(1, 3);
+      return `${metros},${centimetros}m`;
+    }
+    return categoria;
   }
 
   /**

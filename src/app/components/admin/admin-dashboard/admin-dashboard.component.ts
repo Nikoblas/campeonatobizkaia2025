@@ -73,6 +73,10 @@ export class AdminDashboardComponent implements OnInit {
     this.categorias = this.competitionService.getCategorias();
   }
 
+  getCategoriaVisual(categoria: string): string {
+    return this.competitionService.getCategoriaVisual(categoria);
+  }
+
   hasData(concurso: string, dia: string, categoria: string): boolean {
     const data = this.competitionService.getCompetitionFileData(
       concurso,
@@ -360,7 +364,7 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   exportarClasificacion(concurso: string, categoria: string) {
-    const diasBase = ['VIERNES', 'SABADO', 'DOMINGO'];
+    const diasBase = ['SABADO', 'DOMINGO'];
     const mapa: Map<string, { licencia: string; nombre: string; club: string; caballo?: string; resultados: { dia: string; puntos: number; tiempo?: string; fueEL: boolean; fueELI: boolean; }[]; eliminaciones: number; totalPuntos: number; tiempoDesempate?: number; } > = new Map();
 
     // Cargar resultados de los 3 días
@@ -434,7 +438,6 @@ export class AdminDashboardComponent implements OnInit {
     // Preparar salida
     const salida = participantes.map((p, idx) => {
       const getDia = (d: string) => p.resultados.find((r) => r.dia === d);
-      const viernesVal = getDia('VIERNES');
       const sabadoVal = getDia('SABADO');
       const domingoVal = getDia('DOMINGO');
       return {
@@ -442,7 +445,6 @@ export class AdminDashboardComponent implements OnInit {
         Jinete: p.nombre,
         Club: p.club,
         Total: p.totalPuntos,
-        Viernes: viernesVal?.puntos ?? '-',
         'Sábado': sabadoVal?.puntos ?? '-',
         Domingo: domingoVal?.puntos ?? '-',
       };
@@ -456,7 +458,7 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   descargarPlantillaCategoria(concurso: string, categoria: string) {
-    const headers = ['Clas', 'Jinete', 'Club', 'Total', 'Viernes', 'Sábado', 'Domingo'];
+    const headers = ['Clas', 'Jinete', 'Club', 'Total', 'Sábado', 'Domingo'];
     const worksheet = XLSX.utils.json_to_sheet([], { header: headers, skipHeader: false });
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, `CAT-${categoria}`);
