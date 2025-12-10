@@ -5,6 +5,11 @@ import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', component: CompetitionTableComponent },
+  { path: '080', component: CompetitionTableComponent },
+  { path: '100', component: CompetitionTableComponent },
+  { path: '110', component: CompetitionTableComponent },
+  { path: '120', component: CompetitionTableComponent },
+  { path: '130', component: CompetitionTableComponent },
   { path: 'explorer', component: CompetitionExplorerComponent },
   {
     path: 'admin',

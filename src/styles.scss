@@ -1,5 +1,45 @@
 /* You can add global styles to this file, and also import other style files */
 
+/* Fondo difuminado para toda la aplicación */
+body {
+  background-image: url('/assets/fondo.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  position: relative;
+  min-height: 100vh;
+  
+  /* Crear un pseudo-elemento para el blur sin afectar el contenido */
+  &::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/assets/fondo.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    filter: blur(5px) brightness(0.9);
+    z-index: -1;
+  }
+  
+  /* Overlay semi-transparente para mejorar legibilidad */
+  &::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7);
+    z-index: -1;
+  }
+}
+
 /* Forzar vista de escritorio en dispositivos móviles */
 @media screen and (max-width: 768px) {
   body {

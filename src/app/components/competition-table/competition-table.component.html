@@ -65,8 +65,7 @@
     </ng-container>
 
     <ng-template #tablaVista>
-      <ng-template #tablaNormal>
-        <div class="table-container">
+      <div class="table-container">
           <div class="table-header">
             <h2>
               Clasificación {{ getCategoriaVisual(categoriaSeleccionada) }}
@@ -90,7 +89,7 @@
               </button>
             </div>
           </div>
-          <div *ngIf="datos.length === 0" class="empty-state">
+          <div *ngIf="datos && datos.length === 0" class="empty-state">
             <p>
               Todavía no hay resultados disponibles para esta categoría. El
               comité organizador publicará los listados a medida que finalicen
@@ -253,7 +252,6 @@
             </tbody>
           </table>
         </div>
-      </ng-template>
     </ng-template>
   </div>
 </div>

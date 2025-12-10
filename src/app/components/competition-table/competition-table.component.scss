@@ -2,6 +2,8 @@
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
+  position: relative;
+  z-index: 1;
 }
 
 .header {
@@ -10,7 +12,11 @@
   align-items: center;
   margin-bottom: 30px;
   padding-bottom: 20px;
-  border-bottom: 2px solid #e0e0e0;
+  border-bottom: 2px solid rgba(224, 224, 224, 0.8);
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 15px 20px;
+  border-radius: 8px;
+  backdrop-filter: blur(5px);
 }
 
 .header-left {
@@ -75,10 +81,11 @@ h1 {
 }
 
 .content {
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.95);
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   padding: 20px;
+  backdrop-filter: blur(5px);
 }
 
 .tabs {

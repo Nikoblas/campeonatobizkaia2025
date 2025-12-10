@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import {
   CompetitionService,
   EquipoEntry,
@@ -54,7 +54,9 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
 
   constructor(
     private competitionService: CompetitionService,
-    private http: HttpClient
+    private http: HttpClient,
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   getCategoriaVisual(categoria: string): string {
@@ -63,16 +65,62 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.categorias = this.competitionService.getCategorias();
+    
+    // Inicializar datos como array vacío para que el mensaje de estado vacío funcione
+    this.datos = [];
 
-    const categoriaGuardada = localStorage.getItem('categoriaSeleccionada');
-    if (categoriaGuardada && categoriaGuardada !== 'inicio') {
-      this.categoriaSeleccionada = categoriaGuardada;
-      localStorage.removeItem('categoriaSeleccionada');
+    // Leer la categoría de la URL
+    const categoriaFromUrl = this.route.snapshot.url.length > 0 
+      ? this.route.snapshot.url[0].path 
+      : '';
+    
+    // Verificar si la categoría de la URL es válida
+    if (categoriaFromUrl && this.categorias.includes(categoriaFromUrl)) {
+      this.categoriaSeleccionada = categoriaFromUrl;
+    } else {
+      // Si no hay categoría en la URL o no es válida, usar 'inicio' o la guardada
+      const categoriaGuardada = localStorage.getItem('categoriaSeleccionada');
+      if (categoriaGuardada && categoriaGuardada !== 'inicio' && this.categorias.includes(categoriaGuardada)) {
+        this.categoriaSeleccionada = categoriaGuardada;
+        localStorage.removeItem('categoriaSeleccionada');
+      } else {
+        this.categoriaSeleccionada = 'inicio';
+      }
     }
 
+    // Suscribirse a cambios en la ruta para actualizar cuando cambie la URL
+    // Usar un flag para evitar cargar datos dos veces cuando se accede directamente por URL
+    let datosYaCargados = false;
+    
+    const routeSub = this.route.url.subscribe(urlSegments => {
+      const nuevaCategoria = urlSegments.length > 0 ? urlSegments[0].path : '';
+      
+      if (nuevaCategoria && this.categorias.includes(nuevaCategoria)) {
+        this.categoriaSeleccionada = nuevaCategoria;
+        this.datos = []; // Resetear datos al cambiar de categoría
+        // Solo cargar datos si ya están listos (cuando se cambia de ruta después de cargar)
+        // Si se accede directamente por URL, la suscripción a datosListos$ se encargará
+        if (datosYaCargados) {
+          this.cargarDatos();
+        }
+      } else if (nuevaCategoria === '' && this.categoriaSeleccionada !== 'inicio') {
+        this.categoriaSeleccionada = 'inicio';
+        this.datos = []; // Resetear datos al cambiar a inicio
+      }
+    });
+    this.subscriptions.push(routeSub);
+
+    // Suscribirse a cuando los datos estén listos
     const datosSub = this.competitionService.datosListos$.subscribe((ready) => {
       if (ready) {
-        this.cargarDatos();
+        datosYaCargados = true;
+        // Solo cargar datos si no estamos en 'inicio'
+        if (this.categoriaSeleccionada !== 'inicio') {
+          this.cargarDatos();
+        } else {
+          // Si estamos en inicio, asegurarse de que datos esté vacío
+          this.datos = [];
+        }
         this.cargando = false;
       }
     });
@@ -94,12 +142,23 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
 
   cambiarCategoria() {
     if (this.categoriaSeleccionada !== 'inicio') {
+      // Navegar a la ruta correspondiente a la categoría
+      this.router.navigate(['/' + this.categoriaSeleccionada]);
       this.cargarDatos();
+    } else {
+      // Si es 'inicio', navegar a la raíz
+      this.router.navigate(['/']);
     }
   }
 
   seleccionarCategoria(categoria: string) {
     this.categoriaSeleccionada = categoria;
+    // Navegar a la ruta correspondiente a la categoría
+    if (categoria === 'inicio') {
+      this.router.navigate(['/']);
+    } else {
+      this.router.navigate(['/' + categoria]);
+    }
     this.cargarDatos();
   }
 
@@ -161,6 +220,15 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
   }
 
   cargarDatos() {
+    // Si la categoría es 'inicio', no cargar datos
+    if (this.categoriaSeleccionada === 'inicio') {
+      this.datos = [];
+      return;
+    }
+
+    // Asegurarse de que datos esté inicializado como array vacío antes de procesar
+    this.datos = [];
+
     const concurso = 'SEDE';
     const datosConcurso =
       this.competitionService.getAllCompetitionData(concurso);
@@ -294,6 +362,7 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
         }
       }
     }
+    
     const listadoJinetes = Object.keys(jinetesMap)
       .map((licencia) => {
         const jinete = jinetesMap[licencia];
@@ -332,19 +401,11 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
             ['EL', 'E', 'R', 'ELI', 'RET', 'NC'].includes(puntosOriginales.toUpperCase())
           ) {
             eliminaciones++;
-            console.log(
-              `⚠️ ELIMINACIÓN: ${
-                jinete.nombreJinete
-              } - ${p.toUpperCase()}: ${puntosOriginales} (Total: ${eliminaciones})`
-            );
           }
         }
 
         // Si tiene 2 o más eliminaciones, excluir de la clasificación
         if (eliminaciones >= 2) {
-          console.log(
-            `❌ EXCLUIDO: ${jinete.nombreJinete} - ${eliminaciones} eliminaciones (E, EL, ELI, RET, NC)`
-          );
           return null; // Será filtrado después
         }
 
@@ -375,6 +436,7 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
         } as any;
       })
       .filter((jinete) => jinete !== null); // Filtrar jinetes excluidos
+    
     // Primero ordenar solo por puntos totales
     let ordenados = listadoJinetes.sort((a: any, b: any) => {
       return a.total - b.total;
@@ -429,16 +491,8 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
     jineteInfo?: { nombreJinete: string; caballo: string }
   ): any | null {
     const datosDia = datosConcurso.filter((d) => d.dia === dia);
-    console.log(
-      `[BÚSQUEDA] Buscando licencia: "${licencia}" en ${dia} (${datosDia.length} archivos)`
-    );
 
     for (const prueba of datosDia) {
-      console.log(
-        `[BÚSQUEDA] Revisando archivo: ${prueba.categoria} con ${
-          prueba.datos?.length || 0
-        } filas`
-      );
       for (const filaRaw of prueba.datos || []) {
         const fila = this.normalizeRow(filaRaw);
 
@@ -474,12 +528,6 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
           .trim()
           .toUpperCase();
 
-        console.log(
-          `[BÚSQUEDA] Comparando: "${licNormalizada}" vs "${licenciaNormalizada}" (${
-            licNormalizada === licenciaNormalizada ? 'COINCIDE' : 'NO COINCIDE'
-          })`
-        );
-
         // Si tenemos información del jinete de referencia, validar consistencia
         if (jineteInfo && jineteInfo.nombreJinete) {
           const nombreJineteReferencia = (jineteInfo.nombreJinete + '')
@@ -511,9 +559,6 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
 
         // Verificar coincidencia por licencia exacta
         if (licNormalizada === licenciaNormalizada) {
-          console.log(
-            `[BÚSQUEDA] ✅ ENCONTRADO por licencia exacta: ${nombreJinete} (${nombreCaballo})`
-          );
           return { fila, prueba };
         }
 
@@ -522,17 +567,11 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
           nombreCaballoNormalizado &&
           licenciaNormalizada.toUpperCase().includes(nombreCaballoNormalizado)
         ) {
-          console.log(
-            `[BÚSQUEDA] ✅ ENCONTRADO por nombre caballo: ${nombreJinete} (${nombreCaballo})`
-          );
           return { fila, prueba };
         }
 
         // Verificar coincidencia por licencia con sufijo (ej: licencia_1)
         if (licNormalizada.startsWith(licenciaNormalizada + '_')) {
-          console.log(
-            `[BÚSQUEDA] ✅ ENCONTRADO por sufijo: ${nombreJinete} (${nombreCaballo})`
-          );
           return { fila, prueba };
         }
 
@@ -543,17 +582,11 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
           licenciaNormalizada.length > 3 &&
           licNormalizada !== licenciaNormalizada // No debe ser exactamente igual (ya se verificó arriba)
         ) {
-          console.log(
-            `[BÚSQUEDA] ✅ ENCONTRADO por prefijo: ${nombreJinete} (${nombreCaballo})`
-          );
           return { fila, prueba };
         }
       }
     }
 
-    console.log(
-      `[BÚSQUEDA] ❌ NO ENCONTRADO: Licencia "${licencia}" no se encontró en ${dia}`
-    );
     return null;
   }
 
@@ -699,8 +732,6 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
    * Formatea la visualización del desempate (puntos/tiempo)
    */
   formatearDesempate(desempate: CompetitionDay): string {
-    console.log('Formateando desempate:', desempate);
-
     // Verificar si es eliminación
     const esEliminacion =
       typeof desempate.puntos === 'string' &&
