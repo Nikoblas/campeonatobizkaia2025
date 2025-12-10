@@ -1,0 +1,46 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Forzar vista de escritorio en dispositivos móviles */
+@media screen and (max-width: 768px) {
+  body {
+    min-width: 1200px !important;
+    overflow-x: auto !important;
+  }
+  
+  .container {
+    min-width: 1200px !important;
+  }
+  
+  /* Evitar que el contenido se adapte al ancho del móvil */
+  * {
+    box-sizing: border-box;
+  }
+  
+  /* Asegurar que las tablas mantengan su ancho */
+  table {
+    min-width: 100% !important;
+    table-layout: fixed !important;
+  }
+  
+  /* Forzar scroll horizontal en lugar de responsive */
+  .table-container {
+    overflow-x: auto !important;
+    min-width: 1200px !important;
+  }
+}
+
+/* CSS global para elementos tachados en equipos */
+tr.tachado {
+  background-color: #f5f5f5 !important;
+}
+
+tr.tachado td:nth-child(4),
+tr.tachado td:nth-child(5) {
+  color: #999 !important;
+  text-decoration: line-through !important;
+  text-decoration-color: #ff4444 !important;
+  text-decoration-thickness: 3px !important;
+  text-decoration-style: solid !important;
+  font-weight: bold !important;
+  background-color: #f5f5f5 !important;
+}

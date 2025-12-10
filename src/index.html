@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Resultados Campeonato 2025</title>
+    <base href="/" />
+    <meta name="viewport" content="width=1200, initial-scale=1, user-scalable=no" />
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <script>
+      // Forzar viewport de escritorio en móviles
+      function setDesktopViewport() {
+        const viewport = document.querySelector('meta[name="viewport"]');
+        if (window.innerWidth <= 768) {
+          viewport.setAttribute('content', 'width=1200, initial-scale=0.5, user-scalable=yes');
+        }
+      }
+      
+      // Ejecutar al cargar y al redimensionar
+      window.addEventListener('load', setDesktopViewport);
+      window.addEventListener('resize', setDesktopViewport);
+    </script>
+  </head>
+  <body>
+    <app-root></app-root>
+  </body>
+</html>

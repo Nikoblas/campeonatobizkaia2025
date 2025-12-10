@@ -1,0 +1,297 @@
+<div class="container">
+  <div class="header">
+    <div class="header-left">
+      <h1>Resumen de Campeonato 2025</h1>
+      <div class="category-selector">
+        <label for="categoria">Vista:</label>
+        <select
+          id="categoria"
+          [(ngModel)]="categoriaSeleccionada"
+          (change)="cambiarCategoria()"
+        >
+          <option value="inicio">Inicio</option>
+          <option *ngFor="let cat of categorias" [value]="cat">
+            {{ cat }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <button
+      class="explorer-btn"
+      (click)="refrescarDatos()"
+      [disabled]="cargando"
+    >
+      <i class="fas fa-refresh" [class.fa-spin]="cargando"></i>
+      {{ cargando ? "Cargando..." : "Refrescar" }}
+    </button>
+    <!--     <button class="explorer-btn" routerLink="/explorer">
+      <i class="fas fa-search"></i>
+      Explorar Resultados Detallados
+    </button> -->
+  </div>
+
+  <div class="content">
+    <ng-container *ngIf="categoriaSeleccionada === 'inicio'; else tablaVista">
+      <div class="inicio-container">
+        <h2>Clasificaciones por Categoría</h2>
+        <div class="categorias-buttons">
+          <button
+            *ngFor="let cat of categorias"
+            class="categoria-btn"
+            (click)="seleccionarCategoria(cat)"
+            [class.active]="categoriaSeleccionada === cat"
+          >
+            {{ cat }}
+          </button>
+        </div>
+
+        <h2 class="mt-5">Bases del Campeonato 2025</h2>
+        <button
+          class="concurso-btn normativa-btn"
+          (click)="descargarPDF('normativa')"
+        >
+          <i class="fas fa-file-pdf"></i>
+          DESCARGAR NORMATIVA & AVANCE 2025
+        </button>
+      </div>
+    </ng-container>
+
+    <ng-template #tablaVista>
+      <div
+        *ngIf="categoriaSeleccionada === 'EQUIPOS'; else tablaNormal"
+        class="table-container"
+      >
+        <div class="table-header">
+          <h2>Clasificación por Equipos</h2>
+          <div class="header-buttons">
+            <button
+              class="download-btn"
+              (click)="descargarExcelEquipos()"
+              [disabled]="equipos.length === 0"
+            >
+              <i class="fas fa-download"></i>
+              Descargar Excel
+            </button>
+            <button
+              class="print-btn"
+              (click)="imprimirEquipos()"
+              [disabled]="equipos.length === 0"
+            >
+              <i class="fas fa-print"></i>
+              Imprimir
+            </button>
+          </div>
+        </div>
+        <div *ngIf="equipos.length === 0" class="empty-state">
+          <p>
+            Aún no hay resultados publicados para la categoría de Equipos. En
+            breve se irán publicando los resultados oficiales del campeonato.
+            Vuelve a consultar esta sección más tarde.
+          </p>
+        </div>
+        <div *ngIf="equipos.length > 0" class="equipos-container">
+          <div
+            *ngFor="let eq of equipos; let idx = index"
+            class="equipo-card"
+            [ngClass]="{
+              'top-1': idx === 0,
+              'top-2': idx === 1,
+              'top-3': idx === 2,
+              'eliminado': eq.eliminado
+            }"
+          >
+            <div class="equipo-header">
+              <div class="equipo-clasificacion">{{ idx + 1 }}</div>
+              <div class="equipo-info">
+                <h3>
+                  {{ eq.equipo | uppercase }} / {{ eq.jefeEquipo | uppercase }}
+                </h3>
+              </div>
+              <div class="equipo-totales">
+                <div class="total-puntos">
+                  {{ eq.eliminado ? 'ELI' : eq.totalPuntos + ' pts' }}
+                </div>
+                <div class="total-tiempo" *ngIf="!eq.eliminado">
+                  {{ eq.totalTiempoSegundos | number : "1.0-2" }}s
+                </div>
+              </div>
+            </div>
+            <table class="equipo-table">
+              <thead>
+                <tr>
+                  <th>Jinete</th>
+                  <th>Categoría</th>
+                  <th>Caballo</th>
+                  <th>Puntos</th>
+                  <th>Tiempo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let miembro of eq.miembros"
+                  [class.tachado]="miembro.tachado"
+                  [attr.data-tachado]="miembro.tachado"
+                  [attr.data-valido]="miembro.validoParaTotal"
+                  [attr.data-debug]="'tachado:' + miembro.tachado + ',valido:' + miembro.validoParaTotal"
+                >
+                  <td>{{ miembro.nombreJinete | uppercase }}</td>
+                  <td>{{ miembro.categoria }}</td>
+                  <td>{{ miembro.caballo | uppercase }}</td>
+                  <td>{{ miembro.puntos }}</td>
+                  <td>{{ miembro.tiempo }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <ng-template #tablaNormal>
+        <div class="table-container">
+          <div class="table-header">
+            <h2>Clasificación {{ categoriaSeleccionada }}</h2>
+            <div class="header-buttons">
+              <button
+                class="download-btn"
+                (click)="descargarExcelIndividual()"
+                [disabled]="datos.length === 0"
+              >
+                <i class="fas fa-download"></i>
+                Descargar Excel
+              </button>
+              <button
+                class="print-btn"
+                (click)="imprimirIndividual()"
+                [disabled]="datos.length === 0"
+              >
+                <i class="fas fa-print"></i>
+                Imprimir
+              </button>
+            </div>
+          </div>
+          <div *ngIf="datos.length === 0" class="empty-state">
+            <p>
+              Todavía no hay resultados disponibles para esta categoría. El
+              comité organizador publicará los listados a medida que finalicen
+              las pruebas y se validen los datos. Por favor, vuelve a intentarlo
+              en unos minutos.
+            </p>
+          </div>
+          <table class="competition-table" *ngIf="datos.length > 0">
+            <thead>
+              <tr>
+                <th *ngIf="datos[0]?.mostrarClasificacion">Clas.</th>
+                <th>Jinete</th>
+                <th>Caballo</th>
+                <th class="total-column">Total</th>
+                <th>Viernes</th>
+                <th>Sábado</th>
+                <th>Domingo</th>
+                <th>Desempate</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let dato of datos; let i = index"
+                [ngClass]="{
+                  'top-1': i === 0 && dato.mostrarClasificacion,
+                  'top-2': i === 1 && dato.mostrarClasificacion,
+                  'top-3': i === 2 && dato.mostrarClasificacion,
+                  'top-4': i === 3 && dato.mostrarClasificacion,
+                  'top-5': i === 4 && dato.mostrarClasificacion,
+                  'top-6': i === 5 && dato.mostrarClasificacion,
+                  'top-7': i === 6 && dato.mostrarClasificacion,
+                  'top-8': i === 7 && dato.mostrarClasificacion,
+                  'top-9': i === 8 && dato.mostrarClasificacion,
+                  'top-10': i === 9 && dato.mostrarClasificacion
+                }"
+              >
+                <td *ngIf="dato.mostrarClasificacion">
+                  {{ dato.clasificacion }}
+                </td>
+                <td>
+                  <ng-container
+                    *ngIf="
+                      categoriaSeleccionada === '130' ||
+                        categoriaSeleccionada === '120';
+                      else top3
+                    "
+                  >
+                    <span *ngIf="i === 0 && dato.mostrarClasificacion && tieneDesempateValido(dato)">🥇</span>
+                    <span *ngIf="i === 1 && dato.mostrarClasificacion && tieneDesempateValido(dato)">🥈</span>
+                    <span *ngIf="i === 2 && dato.mostrarClasificacion && tieneDesempateValido(dato)">🥉</span>
+                    <span *ngIf="i === 3 && dato.mostrarClasificacion && tieneDesempateValido(dato)">🏅</span>
+                    <span *ngIf="i === 4 && dato.mostrarClasificacion && tieneDesempateValido(dato)">🏅</span>
+                  </ng-container>
+                  <ng-template #top3>
+                    <ng-container
+                      *ngIf="
+                        categoriaSeleccionada === 'Criterium1' ||
+                        categoriaSeleccionada === 'Criterium2' ||
+                        categoriaSeleccionada === 'Criterium3';
+                        else top3Normal
+                      "
+                    >
+                      <span *ngIf="i === 0 && dato.mostrarClasificacion && tieneDesempateValido(dato)">🥇</span>
+                    </ng-container>
+                    <ng-template #top3Normal>
+                      <span *ngIf="i === 0 && dato.mostrarClasificacion && tieneDesempateValido(dato)">🥇</span>
+                      <span *ngIf="i === 1 && dato.mostrarClasificacion && tieneDesempateValido(dato)">🥈</span>
+                      <span *ngIf="i === 2 && dato.mostrarClasificacion && tieneDesempateValido(dato)">🥉</span>
+                    </ng-template>
+                  </ng-template>
+                  <span 
+                    [class.winner-name]="i === 0 && dato.mostrarClasificacion && tieneDesempateValido(dato)"
+                    [class.top3-name]="(i === 1 || i === 2) && dato.mostrarClasificacion && tieneDesempateValido(dato)"
+                  >
+                    {{ dato.nombreJinete | uppercase }}
+                  </span>
+                </td>
+                <td>{{ dato.caballo | uppercase }}</td>
+                <td class="total-column">{{ dato.total }}</td>
+                <td
+                  [title]="getTooltipText(dato.viernes)"
+                  [class.tooltip-bottom]="i >= datos.length - 3"
+                >
+                  {{
+                    dato.viernes.puntos !== undefined &&
+                    dato.viernes.puntos !== null
+                      ? dato.viernes.puntos
+                      : "-"
+                  }}
+                </td>
+                <td
+                  [title]="getTooltipText(dato.sabado)"
+                  [class.tooltip-bottom]="i >= datos.length - 3"
+                >
+                  {{
+                    dato.sabado.puntos !== undefined &&
+                    dato.sabado.puntos !== null
+                      ? dato.sabado.puntos
+                      : "-"
+                  }}
+                </td>
+                <td
+                  [title]="getTooltipText(dato.domingo)"
+                  [class.tooltip-bottom]="i >= datos.length - 3"
+                >
+                  {{
+                    dato.domingo.puntos !== undefined &&
+                    dato.domingo.puntos !== null
+                      ? dato.domingo.puntos
+                      : "-"
+                  }}
+                </td>
+                <td
+                  [title]="getTooltipText(dato.desempate)"
+                  [class.tooltip-bottom]="i >= datos.length - 3"
+                >
+                  {{ formatearDesempate(dato.desempate) | uppercase }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </ng-template>
+    </ng-template>
+  </div>
+</div>

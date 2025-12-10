@@ -1,0 +1,37 @@
+<div class="container">
+  <h1>Clasificación de Campeonato Castilla y Leon 2025</h1>
+
+  <div class="categoria-selector">
+    <button
+      *ngFor="let categoria of categorias"
+      [class.active]="categoria === categoriaSeleccionada"
+      (click)="cambiarCategoria(categoria)"
+    >
+      {{ categoria }}
+    </button>
+  </div>
+
+  <app-competition-table
+    [categoria]="categoriaSeleccionada"
+  ></app-competition-table>
+
+  <div class="ver-resultados-btn-container">
+    <button class="ver-resultados-btn" (click)="abrirPopupResultados()">
+      Ver resultados de competiciones
+    </button>
+  </div>
+
+  <app-competition-explorer
+    *ngIf="mostrarPopupResultados"
+    class="popup-modal"
+  ></app-competition-explorer>
+  <div
+    class="popup-overlay"
+    *ngIf="mostrarPopupResultados"
+    (click)="cerrarPopupResultados()"
+  ></div>
+
+  <footer class="version-footer">
+    <span>v0.0.1</span>
+  </footer>
+</div>

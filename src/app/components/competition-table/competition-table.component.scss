@@ -1,0 +1,768 @@
+.container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+h1 {
+  color: #2c3e50;
+  font-size: 2.5em;
+  margin: 0;
+  font-weight: 600;
+}
+
+.category-selector {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  label {
+    font-weight: 500;
+    color: #2c3e50;
+  }
+
+  select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+    min-width: 100px;
+    cursor: pointer;
+    font-size: 1.1em;
+
+    &:focus {
+      outline: none;
+      border-color: #3498db;
+    }
+  }
+}
+
+.explorer-btn {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 1.1em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #2980b9;
+  }
+
+  i {
+    font-size: 1.2em;
+  }
+}
+
+.content {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 20px;
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 10px;
+}
+
+.tab-btn {
+  padding: 10px 20px;
+  border: none;
+  background: none;
+  font-size: 1.1em;
+  color: #7f8c8d;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: #f8f9fa;
+    color: #2c3e50;
+  }
+
+  &.active {
+    background-color: #3498db;
+    color: white;
+  }
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  
+  h2 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 1.8em;
+    font-weight: 600;
+  }
+}
+
+.header-buttons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.download-btn {
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 1em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+
+  &:hover:not(:disabled) {
+    background-color: #229954;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3);
+  }
+
+  &:disabled {
+    background-color: #bdc3c7;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  i {
+    font-size: 1.1em;
+  }
+}
+
+.print-btn {
+  background-color: #e67e22;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 1em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+
+  &:hover:not(:disabled) {
+    background-color: #d35400;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(230, 126, 34, 0.3);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    background-color: #bdc3c7;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    opacity: 0.6;
+  }
+
+  i {
+    font-size: 1.1em;
+  }
+}
+
+// Estilos para equipos
+.equipos-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.equipo-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  &.top-1 { border-color: #ffd700; background: linear-gradient(135deg, #fff9c4 0%, #ffffff 100%); }
+  &.top-2 { border-color: #c0c0c0; background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%); }
+  &.top-3 { border-color: #cd7f32; background: linear-gradient(135deg, #ffe4b5 0%, #ffffff 100%); }
+}
+
+.equipo-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  color: white;
+
+  .equipo-clasificacion {
+    font-size: 2.5em;
+    font-weight: bold;
+    min-width: 60px;
+    text-align: center;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .equipo-info {
+    flex: 1;
+    text-align: center;
+    margin: 0 20px;
+
+    h3 {
+      margin: 0;
+      font-size: 1.4em;
+      font-weight: 600;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  .equipo-totales {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    min-width: 120px;
+
+    .total-puntos {
+      font-size: 1.3em;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .total-tiempo {
+      font-size: 1.1em;
+      opacity: 0.9;
+    }
+  }
+}
+
+.equipo-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+
+  th, td {
+    padding: 12px 16px;
+    text-align: center;
+    border-bottom: 1px solid #ecf0f1;
+  }
+
+  th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 0.95em;
+  }
+
+  td {
+    color: #34495e;
+    font-size: 0.9em;
+  }
+
+  tr:hover {
+    background-color: #f8f9fa;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+}
+
+.competition-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background: #f4f6fb;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(44,62,80,0.07);
+  overflow: hidden;
+  
+  th, td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #e0e0e0;
+  }
+
+  th {
+    background: linear-gradient(90deg, #3498db 0%, #6dd5fa 100%);
+    color: #fff;
+    border: none;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 2px rgba(44,62,80,0.08);
+  }
+
+  td {
+    border: none;
+    color: #2c3e50;
+    background: transparent;
+    transition: background 0.2s;
+  }
+
+  tr {
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  tr:hover {
+    background: #e3f2fd !important;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f8f9fa;
+  }
+
+  .no-data {
+    text-align: center;
+    color: #7f8c8d;
+    font-style: italic;
+    padding: 20px;
+  }
+
+  // Colores para los 10 primeros
+  tr.top-1 { background: linear-gradient(90deg, #ffe082 0%, #fffde7 100%) !important; font-weight: bold; }
+  tr.top-2 { background: linear-gradient(90deg, #e0e0e0 0%, #fafafa 100%) !important; font-weight: bold; }
+  tr.top-3 { background: linear-gradient(90deg, #ffccbc 0%, #fff3e0 100%) !important; font-weight: bold; }
+  tr.top-4, tr.top-5, tr.top-6, tr.top-7, tr.top-8, tr.top-9, tr.top-10 {
+    background: linear-gradient(90deg, #e3f2fd 0%, #f8f9fa 100%) !important;
+  }
+
+  // Estilos para nombres de los 3 primeros
+  .winner-name {
+    font-size: 1.3em !important;
+    font-weight: 800 !important;
+    color: #d4af37 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    letter-spacing: 0.5px;
+  }
+
+  .top3-name {
+    font-size: 1.15em !important;
+    font-weight: 700 !important;
+    color: #2c3e50 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
+  tbody tr {
+    td.total-column {
+      font-size: 1.2em;
+      font-weight: 700;
+      background-color: rgba(0, 0, 0, 0.05);
+      text-align: center;
+      padding: 0.5em;
+      border-left: 2px solid #ccc;
+      border-right: 2px solid #ccc;
+    }
+
+    td:first-child {
+      font-weight: 600;
+      text-align: center;
+    }
+  }
+
+  tr.tachado {
+    background-color: #f5f5f5 !important;
+    
+    td:nth-child(4),
+    td:nth-child(5) {
+      color: #999 !important;
+      text-decoration: line-through !important;
+      text-decoration-color: #ff4444 !important;
+      text-decoration-thickness: 3px !important;
+      text-decoration-style: solid !important;
+      font-weight: bold !important;
+      background-color: #f5f5f5 !important;
+    }
+  }
+
+  // CSS más específico para asegurar que se aplique
+  .equipos-container .equipo-card .equipo-table tbody tr.tachado {
+    background-color: #f5f5f5 !important;
+    
+    td:nth-child(4),
+    td:nth-child(5) {
+      color: #999 !important;
+      text-decoration: line-through !important;
+      text-decoration-color: #ff4444 !important;
+      text-decoration-thickness: 3px !important;
+      text-decoration-style: solid !important;
+      font-weight: bold !important;
+      background-color: #f5f5f5 !important;
+    }
+  }
+
+  // CSS aún más específico para forzar el estilo
+  .equipos-container .equipo-card .equipo-table tbody tr[class*="tachado"] {
+    background-color: #f5f5f5 !important;
+    
+    td:nth-child(4),
+    td:nth-child(5) {
+      color: #999 !important;
+      text-decoration: line-through !important;
+      text-decoration-color: #ff4444 !important;
+      text-decoration-thickness: 3px !important;
+      text-decoration-style: solid !important;
+      font-weight: bold !important;
+      background-color: #f5f5f5 !important;
+    }
+  }
+}
+
+h2 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+// Tooltip nativo
+[title] {
+  position: relative;
+  
+  &:hover::after {
+    content: attr(title);
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 8px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: pre-line;
+    z-index: 1000;
+    pointer-events: none;
+    margin-top: 5px;
+  }
+
+  &.tooltip-bottom:hover::after {
+    top: auto;
+    bottom: 100%;
+    margin-top: 0;
+    margin-bottom: 5px;
+  }
+}
+
+// Responsive
+@media (max-width: 900px) {
+  .container {
+    padding: 8px;
+    max-width: 100vw;
+  }
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 16px;
+  }
+  .header-left {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  h1 {
+    font-size: 1.3em;
+    word-break: break-word;
+  }
+  .category-selector label {
+    font-size: 1em;
+  }
+  .category-selector select {
+    min-width: 80px;
+    font-size: 1em;
+    padding: 6px 8px;
+  }
+  .explorer-btn {
+    width: 100%;
+    font-size: 1em;
+    padding: 10px 0;
+    justify-content: center;
+  }
+  .content {
+    padding: 8px;
+  }
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(44,62,80,0.10);
+  }
+  .competition-table {
+    font-size: 0.95em;
+    min-width: 700px;
+    th, td {
+      padding: 7px 4px;
+      font-size: 0.95em;
+    }
+    th {
+      font-size: 0.98em;
+    }
+  }
+  h2 {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 2px;
+  }
+  h1 {
+    font-size: 1.05em;
+  }
+  .competition-table {
+    min-width: 550px;
+    font-size: 0.89em;
+    th, td {
+      padding: 5px 2px;
+      font-size: 0.89em;
+    }
+  }
+  .explorer-btn {
+    font-size: 0.95em;
+    padding: 8px 0;
+  }
+  .category-selector label {
+    font-size: 0.95em;
+  }
+  .category-selector select {
+    font-size: 0.95em;
+    padding: 4px 6px;
+  }
+}
+
+// Scroll horizontal
+.table-container::-webkit-scrollbar {
+  height: 8px;
+}
+.table-container::-webkit-scrollbar-thumb {
+  background: #e0e0e0;
+  border-radius: 4px;
+}
+
+// Fijar columnas en móvil
+@media (max-width: 700px) {
+  .competition-table th:first-child,
+  .competition-table td:first-child {
+    position: sticky;
+    left: 0;
+    background: #f8f9fa;
+    z-index: 2;
+    box-shadow: 2px 0 2px -2px #ccc;
+  }
+  .competition-table th:nth-child(2),
+  .competition-table td:nth-child(2) {
+    position: sticky;
+    left: 48px;
+    background: #f8f9fa;
+    z-index: 2;
+    box-shadow: 2px 0 2px -2px #ccc;
+  }
+}
+
+// Estilos para inicio
+.inicio-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  text-align: center;
+
+  h2 {
+    color: #2c3e50;
+    font-size: 2em;
+    margin-bottom: 30px;
+    font-weight: 600;
+
+    &.mt-5 {
+      margin-top: 50px;
+    }
+  }
+}
+
+.categorias-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 20px;
+  max-width: 600px;
+}
+
+.categoria-btn {
+  padding: 12px 24px;
+  border: 2px solid #3498db;
+  background: white;
+  color: #3498db;
+  border-radius: 6px;
+  font-size: 1.2em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 100px;
+
+  &:hover {
+    background: #3498db;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2);
+  }
+
+  &.active {
+    background: #3498db;
+    color: white;
+    box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2);
+  }
+}
+
+.botones-concurso {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.concurso-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 20px;
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.2em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  i {
+    font-size: 1.4em;
+  }
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(135deg, #2980b9 0%, #2573a7 100%);
+  }
+
+  &:disabled {
+    background: linear-gradient(135deg, #bdc3c7 0%, #95a5a6 100%);
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+}
+
+.normativa-btn {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  max-width: 400px;
+  margin: 0 auto;
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+  }
+}
+
+// Responsive para equipos
+@media (max-width: 768px) {
+  .equipo-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+
+    .equipo-clasificacion {
+      font-size: 2em;
+      min-width: auto;
+    }
+
+    .equipo-info {
+      margin: 0;
+      
+      h3 {
+        font-size: 1.2em;
+      }
+    }
+
+    .equipo-totales {
+      align-items: center;
+      flex-direction: row;
+      gap: 20px;
+      min-width: auto;
+
+      .total-puntos, .total-tiempo {
+        font-size: 1.1em;
+      }
+    }
+  }
+
+  .equipo-table {
+    th, td {
+      padding: 8px 12px;
+      font-size: 0.85em;
+    }
+  }
+
+  // Estilo para equipos eliminados
+  .equipo-card.eliminado {
+    background-color: #ffebee;
+    border-left: 4px solid #f44336;
+    opacity: 0.8;
+    
+    .equipo-header {
+      .equipo-clasificacion {
+        background-color: #f44336;
+        color: white;
+      }
+      
+      .equipo-totales {
+        .total-puntos {
+          color: #f44336;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}
