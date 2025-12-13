@@ -28,6 +28,11 @@ export interface EquipoEntry {
   licencia: string;
 }
 
+export interface AdmitidoEntry {
+  lic: string;
+  lac: string;
+}
+
 export interface CompetitionImportResult {
   resultados: CompetitionFileData[];
   faltantes: string[];
@@ -61,6 +66,7 @@ export class CompetitionService {
   private datosCargados$ = new BehaviorSubject<boolean>(false);
   private errorCarga$ = new BehaviorSubject<string | null>(null);
   private equiposMemoria: EquipoEntry[] | null = null;
+  private admitidosMemoria: Set<string> | null = null; // Set de strings "lic-lac"
 
   constructor(private http: HttpClient) {
     this.importarTodosLosDatos();
@@ -112,25 +118,57 @@ export class CompetitionService {
     this.datosCargados$.next(false);
     this.errorCarga$.next(null);
 
-    const allRequests: Observable<CompetitionImportResult>[] = [];
-    for (const concurso of this.concursos) {
-      allRequests.push(this.getAllCompetitionDataFromFiles(concurso));
-    }
+    // Primero cargar los admitidos
+    this.loadAdmitidos().subscribe({
+      next: () => {
+        // Una vez cargados los admitidos, cargar los datos de competición
+        const allRequests: Observable<CompetitionImportResult>[] = [];
+        for (const concurso of this.concursos) {
+          allRequests.push(this.getAllCompetitionDataFromFiles(concurso));
+        }
 
-    forkJoin(allRequests).subscribe({
-      next: (results) => {
-        results.forEach((result, idx) => {
-          const concurso = this.concursos[idx];
-          this.datosMemoria[concurso] = result.resultados;
-          this.faltantesMemoria[concurso] = result.faltantes;
+        forkJoin(allRequests).subscribe({
+          next: (results) => {
+            results.forEach((result, idx) => {
+              const concurso = this.concursos[idx];
+              this.datosMemoria[concurso] = result.resultados;
+              this.faltantesMemoria[concurso] = result.faltantes;
+            });
+            this.datosCargados$.next(true);
+          },
+          error: (error) => {
+            console.error('[Import] Error al cargar los datos:', error);
+            this.errorCarga$.next(
+              'Error al cargar los datos de competición. Por favor, recarga la página.'
+            );
+          },
         });
-        this.datosCargados$.next(true);
       },
       error: (error) => {
-        console.error('[Import] Error al cargar los datos:', error);
-        this.errorCarga$.next(
-          'Error al cargar los datos de competición. Por favor, recarga la página.'
-        );
+        console.error('[Import] Error al cargar admitidos:', error);
+        // Continuar aunque falle la carga de admitidos (puede que no exista el archivo)
+        this.admitidosMemoria = new Set();
+        const allRequests: Observable<CompetitionImportResult>[] = [];
+        for (const concurso of this.concursos) {
+          allRequests.push(this.getAllCompetitionDataFromFiles(concurso));
+        }
+
+        forkJoin(allRequests).subscribe({
+          next: (results) => {
+            results.forEach((result, idx) => {
+              const concurso = this.concursos[idx];
+              this.datosMemoria[concurso] = result.resultados;
+              this.faltantesMemoria[concurso] = result.faltantes;
+            });
+            this.datosCargados$.next(true);
+          },
+          error: (error) => {
+            console.error('[Import] Error al cargar los datos:', error);
+            this.errorCarga$.next(
+              'Error al cargar los datos de competición. Por favor, recarga la página.'
+            );
+          },
+        });
       },
     });
   }
@@ -193,19 +231,116 @@ export class CompetitionService {
   }
 
   /**
+   * Carga el Excel de admitidos (columnas: lic, lac) y lo guarda en memoria
+   */
+  private loadAdmitidos(): Observable<void> {
+    if (this.admitidosMemoria) {
+      return of(void 0);
+    }
+    const pathXls = `assets/data/SEDE/admitidos.xls`;
+    const pathXlsx = `assets/data/SEDE/admitidos.xlsx`;
+    return this.http.get(pathXls, { responseType: 'arraybuffer' }).pipe(
+      map((data) => {
+        this.parseAdmitidosExcel(data);
+        return void 0;
+      }),
+      catchError(() =>
+        this.http
+          .get(pathXlsx, { responseType: 'arraybuffer' })
+          .pipe(
+            map((data) => {
+              this.parseAdmitidosExcel(data);
+              return void 0;
+            }),
+            catchError(() => {
+              // Si no existe el archivo, crear un Set vacío
+              this.admitidosMemoria = new Set();
+              return of(void 0);
+            })
+          )
+      )
+    );
+  }
+
+  /**
+   * Parsea el Excel de admitidos y almacena los binomios lic-lac
+   */
+  private parseAdmitidosExcel(data: ArrayBuffer): void {
+    const workbook = XLSX.read(data, { type: 'array' });
+    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+    const json: any[] = XLSX.utils.sheet_to_json(worksheet);
+    
+    const admitidosSet = new Set<string>();
+    
+    json.forEach((row) => {
+      const lic = (
+        row['lic'] ||
+        row['LIC'] ||
+        row['Lic'] ||
+        row['Licencia'] ||
+        row['LICENCIA'] ||
+        row['licencia'] ||
+        row['Lic'] ||
+        ''
+      )
+        .toString()
+        .trim();
+      
+      const lac = (
+        row['lac'] ||
+        row['LAC'] ||
+        row['Lac'] ||
+        ''
+      )
+        .toString()
+        .trim();
+      
+      // Solo añadir si ambos valores existen y no están vacíos
+      if (lic && lac) {
+        // Crear una clave única para el binomio lic-lac (normalizado)
+        const clave = `${lic}-${lac}`;
+        admitidosSet.add(clave);
+      }
+    });
+    
+    this.admitidosMemoria = admitidosSet;
+  }
+
+  /**
+   * Verifica si un binomio lic-lac está en la lista de admitidos
+   */
+  private esAdmitido(lic: string, lac: string): boolean {
+    if (!this.admitidosMemoria || this.admitidosMemoria.size === 0) {
+      // Si no hay lista de admitidos, permitir todos
+      return true;
+    }
+    // Normalizar valores (trim y convertir a string)
+    const licNormalizado = (lic || '').toString().trim();
+    const lacNormalizado = (lac || '').toString().trim();
+    
+    // Si alguno está vacío, no está admitido (a menos que no haya lista)
+    if (!licNormalizado || !lacNormalizado) {
+      return false;
+    }
+    
+    const clave = `${licNormalizado}-${lacNormalizado}`;
+    return this.admitidosMemoria.has(clave);
+  }
+
+  /**
    * Carga el Excel de equipos (columnas: Equipo, Licencia) y lo guarda en memoria
    */
   loadEquipos(): Observable<EquipoEntry[]> {
     if (this.equiposMemoria) {
       return of(this.equiposMemoria);
     }
-    const pathXlsx = `assets/data/SEDE/EQUIPOS.xlsx`;
     const pathXls = `assets/data/SEDE/EQUIPOS.xls`;
-    return this.http.get(pathXlsx, { responseType: 'arraybuffer' }).pipe(
+    const pathXlsx = `assets/data/SEDE/EQUIPOS.xlsx`;
+    return this.http.get(pathXls, { responseType: 'arraybuffer' }).pipe(
       map((data) => this.parseEquiposExcel(data)),
       catchError(() =>
         this.http
-          .get(pathXls, { responseType: 'arraybuffer' })
+          .get(pathXlsx, { responseType: 'arraybuffer' })
           .pipe(map((data) => this.parseEquiposExcel(data)))
       )
     );
@@ -247,10 +382,10 @@ export class CompetitionService {
     categoria: string
   ): Observable<CompetitionFileData | { faltante: string }> {
     const baseName = `${dia}${categoria}`;
-    const filePathXlsx = `assets/data/${concurso}/${baseName}.xlsx`;
     const filePathXls = `assets/data/${concurso}/${baseName}.xls`;
-    // Intentar primero .xlsx y luego .xls
-    return this.http.get(filePathXlsx, { responseType: 'arraybuffer' }).pipe(
+    const filePathXlsx = `assets/data/${concurso}/${baseName}.xlsx`;
+    // Intentar primero .xls y luego .xlsx
+    return this.http.get(filePathXls, { responseType: 'arraybuffer' }).pipe(
       map((data) => {
         const workbook = XLSX.read(data, { type: 'array' });
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
@@ -261,6 +396,39 @@ export class CompetitionService {
             (v) => v !== null && v !== undefined && v !== ''
           )
         );
+        
+        // Filtrar por lista de admitidos (lic-lac)
+        jsonData = jsonData.filter((row: any) => {
+          const lic = (
+            row['Lic'] ||
+            row['LIC'] ||
+            row['lic'] ||
+            row['Licencia'] ||
+            row['LICENCIA'] ||
+            row['licencia'] ||
+            ''
+          )
+            .toString()
+            .trim();
+          
+          const lac = (
+            row['Lac'] ||
+            row['LAC'] ||
+            row['lac'] ||
+            ''
+          )
+            .toString()
+            .trim();
+          
+          // Si no hay lista de admitidos o ambos valores están vacíos, permitir
+          if (!this.admitidosMemoria || this.admitidosMemoria.size === 0) {
+            return true;
+          }
+          
+          // Solo incluir si está en la lista de admitidos
+          return this.esAdmitido(lic, lac);
+        });
+        
         // Calcular la puntuación más alta de la tabla (solo valores numéricos)
         const maxPuntos = Math.max(
           ...jsonData
@@ -328,8 +496,8 @@ export class CompetitionService {
           ) {
             if (mapLicencia[licencia].elValue !== null) {
               row[puntosKey] = mapLicencia[licencia].elValue;
-            } else if (mapLicencia[licencia].lastClNum !== null) {
-              row[puntosKey] = mapLicencia[licencia].lastClNum + 20;
+            } else if (mapLicencia[licencia].lastClNum !== null && mapLicencia[licencia].lastClNum !== undefined) {
+              row[puntosKey] = mapLicencia[licencia].lastClNum! + 20;
               mapLicencia[licencia].elValue = row[puntosKey];
             } else {
               row[puntosKey] = 20; // Si no hay ningún resultado anterior, se pone 20
@@ -353,11 +521,11 @@ export class CompetitionService {
           dia,
           categoria,
           datos: jsonData as CompetitionRow[],
-          archivo: `${baseName}.xlsx`,
+          archivo: `${baseName}.xls`,
         };
       }),
       catchError(() => {
-        return this.http.get(filePathXls, { responseType: 'arraybuffer' }).pipe(
+        return this.http.get(filePathXlsx, { responseType: 'arraybuffer' }).pipe(
           map((data) => {
             const workbook = XLSX.read(data, { type: 'array' });
             const worksheet = workbook.Sheets[workbook.SheetNames[0]];
@@ -367,6 +535,39 @@ export class CompetitionService {
                 (v) => v !== null && v !== undefined && v !== ''
               )
             );
+            
+            // Filtrar por lista de admitidos (lic-lac)
+            jsonData = jsonData.filter((row: any) => {
+              const lic = (
+                row['Lic'] ||
+                row['LIC'] ||
+                row['lic'] ||
+                row['Licencia'] ||
+                row['LICENCIA'] ||
+                row['licencia'] ||
+                ''
+              )
+                .toString()
+                .trim();
+              
+              const lac = (
+                row['Lac'] ||
+                row['LAC'] ||
+                row['lac'] ||
+                ''
+              )
+                .toString()
+                .trim();
+              
+              // Si no hay lista de admitidos o ambos valores están vacíos, permitir
+              if (!this.admitidosMemoria || this.admitidosMemoria.size === 0) {
+                return true;
+              }
+              
+              // Solo incluir si está en la lista de admitidos
+              return this.esAdmitido(lic, lac);
+            });
+            
             const maxPuntos = Math.max(
               ...jsonData
                 .map((row: any) => limpiarPuntos(row['Puntos']))
@@ -438,8 +639,8 @@ export class CompetitionService {
               ) {
                 if (mapLicencia[licencia].elValue !== null) {
                   row[puntosKey] = mapLicencia[licencia].elValue;
-                } else if (mapLicencia[licencia].lastClNum !== null) {
-                  row[puntosKey] = mapLicencia[licencia].lastClNum + 20;
+                } else if (mapLicencia[licencia].lastClNum !== null && mapLicencia[licencia].lastClNum !== undefined) {
+                  row[puntosKey] = mapLicencia[licencia].lastClNum! + 20;
                   mapLicencia[licencia].elValue = row[puntosKey];
                 } else {
                   row[puntosKey] = 20;
@@ -461,10 +662,10 @@ export class CompetitionService {
               dia,
               categoria,
               datos: jsonData as CompetitionRow[],
-              archivo: `${baseName}.xls`,
+              archivo: `${baseName}.xlsx`,
             };
           }),
-          catchError(() => of({ faltante: filePathXlsx }))
+          catchError(() => of({ faltante: filePathXls }))
         );
       })
     );
@@ -621,8 +822,8 @@ function normalizarFilas(jsonData: any[]): any[] {
     ) {
       if (mapLicencia[licencia].elValue !== null) {
         row[puntosKey] = mapLicencia[licencia].elValue;
-      } else if (mapLicencia[licencia].lastClNum !== null) {
-        row[puntosKey] = mapLicencia[licencia].lastClNum + 20;
+      } else if (mapLicencia[licencia].lastClNum !== null && mapLicencia[licencia].lastClNum !== undefined) {
+        row[puntosKey] = mapLicencia[licencia].lastClNum! + 20;
         mapLicencia[licencia].elValue = row[puntosKey];
       } else {
         row[puntosKey] = 20;

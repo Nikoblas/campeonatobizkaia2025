@@ -40,255 +40,443 @@
   </Style>
  </Styles>
  <Worksheet ss:Name="Sheet1">
-  <Table ss:ExpandedColumnCount="10" ss:ExpandedRowCount="19" x:FullColumns="1"
+  <Table ss:ExpandedColumnCount="11" ss:ExpandedRowCount="32" x:FullColumns="1"
    x:FullRows="1" ss:DefaultColumnWidth="200.25" ss:DefaultRowHeight="15">
    <Column ss:Width="39.75"/>
    <Column ss:Width="20.25"/>
    <Column ss:Width="279.75"/>
    <Column ss:Width="80.25"/>
    <Column ss:Width="330"/>
+   <Column ss:Width="170.25"/>
    <Column ss:Width="249.75"/>
    <Column ss:Width="80.25"/>
    <Column ss:Width="90"/>
    <Column ss:Width="60"/>
    <Column ss:Width="69.75"/>
-   <Row ss:AutoFitHeight="0">
+   <Row>
     <Cell ss:StyleID="s62"><Data ss:Type="String">O.S.</Data></Cell>
     <Cell ss:StyleID="s62"><Data ss:Type="String">Cl</Data></Cell>
     <Cell ss:StyleID="s62"><Data ss:Type="String">Atleta</Data></Cell>
-    <Cell ss:StyleID="s62"><Data ss:Type="String">Licencia</Data></Cell>
+    <Cell ss:StyleID="s62"><Data ss:Type="String">lic</Data></Cell>
     <Cell ss:StyleID="s62"><Data ss:Type="String">Club</Data></Cell>
+    <Cell ss:StyleID="s62"><Data ss:Type="String">Opta a Campeonato</Data></Cell>
     <Cell ss:StyleID="s62"><Data ss:Type="String">Caballo</Data></Cell>
-    <Cell ss:StyleID="s62"><Data ss:Type="String">Licencia</Data></Cell>
+    <Cell ss:StyleID="s62"><Data ss:Type="String">lac</Data></Cell>
     <Cell ss:StyleID="s62"><Data ss:Type="String">Puntos</Data></Cell>
     <Cell ss:StyleID="s62"><Data ss:Type="String">Tiempo</Data></Cell>
     <Cell ss:StyleID="s62"><Data ss:Type="String">Premios</Data></Cell>
    </Row>
-   <Row ss:AutoFitHeight="0">
+   <Row>
+    <Cell><Data ss:Type="Number">20</Data></Cell>
+    <Cell><Data ss:Type="Number">1</Data></Cell>
+    <Cell><Data ss:Type="String">ELENE ANDRES SANZ</Data></Cell>
+    <Cell><Data ss:Type="String">AR370484</Data></Cell>
+    <Cell><Data ss:Type="String">CLUB HIPICO MUNGIA</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">EMILSON</Data></Cell>
+    <Cell><Data ss:Type="String">AR091204</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">61.52</Data></Cell>
+    <Cell><Data ss:Type="Number">250</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="Number">10</Data></Cell>
+    <Cell><Data ss:Type="Number">2</Data></Cell>
+    <Cell><Data ss:Type="String">UXUE ARRUZA RODRIGUEZ</Data></Cell>
+    <Cell><Data ss:Type="Number">234790</Data></Cell>
+    <Cell><Data ss:Type="String">HIPICA ARETXALDE DE LEZAMA</Data></Cell>
+    <Cell><Data ss:Type="String">&#12;</Data></Cell>
+    <Cell><Data ss:Type="String">CEYLAN</Data></Cell>
+    <Cell><Data ss:Type="Number">133391</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">64.069999999999993</Data></Cell>
+    <Cell><Data ss:Type="Number">150</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="Number">26</Data></Cell>
+    <Cell><Data ss:Type="Number">3</Data></Cell>
+    <Cell><Data ss:Type="String">BORJA GARCIA-GALLARDO GARCIA</Data></Cell>
+    <Cell><Data ss:Type="Number">2988</Data></Cell>
+    <Cell><Data ss:Type="String">CLUB HIPICO EQUUS GETXO</Data></Cell>
+    <Cell><Data ss:Type="String">&#12;</Data></Cell>
+    <Cell><Data ss:Type="String">TRIENTA DE LLAMOSAS</Data></Cell>
+    <Cell><Data ss:Type="Number">156699</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">64.97</Data></Cell>
+    <Cell><Data ss:Type="Number">120</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="Number">15</Data></Cell>
+    <Cell><Data ss:Type="Number">4</Data></Cell>
+    <Cell><Data ss:Type="String">DIEGO USON OLASO</Data></Cell>
+    <Cell><Data ss:Type="Number">201619</Data></Cell>
+    <Cell><Data ss:Type="String">HIPICA ARETXALDE DE LEZAMA</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">RYO HT</Data></Cell>
+    <Cell><Data ss:Type="Number">138896</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">66.150000000000006</Data></Cell>
+    <Cell><Data ss:Type="Number">90</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="Number">16</Data></Cell>
+    <Cell><Data ss:Type="Number">5</Data></Cell>
+    <Cell><Data ss:Type="String">GARAZI LANDETA SMITH</Data></Cell>
+    <Cell><Data ss:Type="Number">237184</Data></Cell>
+    <Cell><Data ss:Type="String">HIPICA ARETXALDE DE LEZAMA</Data></Cell>
+    <Cell><Data ss:Type="String">&#12;</Data></Cell>
+    <Cell><Data ss:Type="String">ERMIONE DU VAL JOUEN</Data></Cell>
+    <Cell><Data ss:Type="Number">142191</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">66.56</Data></Cell>
+    <Cell><Data ss:Type="Number">60</Data></Cell>
+   </Row>
+   <Row>
     <Cell><Data ss:Type="Number">7</Data></Cell>
     <Cell><Data ss:Type="Number">7</Data></Cell>
     <Cell><Data ss:Type="String">IRAIA SAINZ MARTINEZ</Data></Cell>
     <Cell><Data ss:Type="Number">265495</Data></Cell>
     <Cell><Data ss:Type="String">CLUB HIPICO ZALDI EDER (GOIHERRI)</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
     <Cell><Data ss:Type="String">CHIPIE DIP Z</Data></Cell>
     <Cell><Data ss:Type="Number">119509</Data></Cell>
     <Cell><Data ss:Type="Number">0</Data></Cell>
     <Cell><Data ss:Type="Number">68.319999999999993</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row ss:AutoFitHeight="0">
+   <Row>
     <Cell><Data ss:Type="Number">18</Data></Cell>
     <Cell><Data ss:Type="Number">8</Data></Cell>
     <Cell><Data ss:Type="String">MAITANE PÉREZ RAMÓN</Data></Cell>
     <Cell><Data ss:Type="Number">335223</Data></Cell>
     <Cell><Data ss:Type="String">HIPIKA LEMOIZ / IGO SPORT HORSES</Data></Cell>
+    <Cell><Data ss:Type="String">&#12;</Data></Cell>
     <Cell><Data ss:Type="String">FLIPPER DE VANOU</Data></Cell>
     <Cell><Data ss:Type="Number">161561</Data></Cell>
     <Cell><Data ss:Type="Number">0</Data></Cell>
     <Cell><Data ss:Type="Number">69.84</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row ss:AutoFitHeight="0">
+   <Row>
     <Cell><Data ss:Type="Number">14</Data></Cell>
     <Cell><Data ss:Type="Number">9</Data></Cell>
     <Cell><Data ss:Type="String">ANE AIZPURU RUILOBA</Data></Cell>
     <Cell><Data ss:Type="Number">158218</Data></Cell>
     <Cell><Data ss:Type="String">CLUB HIPICO URDULIZ</Data></Cell>
+    <Cell><Data ss:Type="String">&#12;</Data></Cell>
     <Cell><Data ss:Type="String">EXPERT LONGANE</Data></Cell>
     <Cell><Data ss:Type="Number">149108</Data></Cell>
     <Cell><Data ss:Type="Number">0</Data></Cell>
     <Cell><Data ss:Type="Number">69.900000000000006</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row ss:AutoFitHeight="0">
+   <Row>
     <Cell><Data ss:Type="Number">25</Data></Cell>
     <Cell><Data ss:Type="Number">10</Data></Cell>
     <Cell><Data ss:Type="String">ERIK HERNANI IJALBA</Data></Cell>
     <Cell><Data ss:Type="Number">269688</Data></Cell>
     <Cell><Data ss:Type="String">HIPICA ARETXALDE DE LEZAMA</Data></Cell>
+    <Cell><Data ss:Type="String">&#12;</Data></Cell>
     <Cell><Data ss:Type="String">CASALLI</Data></Cell>
     <Cell><Data ss:Type="Number">106211</Data></Cell>
     <Cell><Data ss:Type="Number">0</Data></Cell>
     <Cell><Data ss:Type="Number">72.010000000000005</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row ss:AutoFitHeight="0">
+   <Row>
     <Cell><Data ss:Type="Number">17</Data></Cell>
     <Cell><Data ss:Type="Number">11</Data></Cell>
     <Cell><Data ss:Type="String">OIHANE GARCIA URTASUN</Data></Cell>
     <Cell><Data ss:Type="Number">159135</Data></Cell>
     <Cell><Data ss:Type="String">HIPICA ARETXALDE DE LEZAMA</Data></Cell>
+    <Cell><Data ss:Type="String">&#12;</Data></Cell>
     <Cell><Data ss:Type="String">DALLILA</Data></Cell>
     <Cell><Data ss:Type="Number">149836</Data></Cell>
     <Cell><Data ss:Type="Number">0</Data></Cell>
     <Cell><Data ss:Type="Number">72.180000000000007</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row ss:AutoFitHeight="0">
+   <Row>
     <Cell><Data ss:Type="Number">6</Data></Cell>
     <Cell><Data ss:Type="Number">12</Data></Cell>
     <Cell><Data ss:Type="String">NAROA DE LA VEGA UGARTE</Data></Cell>
     <Cell><Data ss:Type="Number">215392</Data></Cell>
     <Cell><Data ss:Type="String">CLUB HIPICO ZALDI EDER (GOIHERRI)</Data></Cell>
+    <Cell><Data ss:Type="String">&#12;</Data></Cell>
     <Cell><Data ss:Type="String">DIVA DE BEAUVOIR</Data></Cell>
     <Cell><Data ss:Type="Number">125256</Data></Cell>
     <Cell><Data ss:Type="Number">0</Data></Cell>
     <Cell><Data ss:Type="Number">73.84</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row ss:AutoFitHeight="0">
+   <Row>
     <Cell><Data ss:Type="Number">1</Data></Cell>
     <Cell><Data ss:Type="Number">13</Data></Cell>
     <Cell><Data ss:Type="String">SABRINA CUEVAS BUISAC</Data></Cell>
     <Cell><Data ss:Type="Number">168146</Data></Cell>
     <Cell><Data ss:Type="String">CLUB HIPICO MUNGIA</Data></Cell>
+    <Cell><Data ss:Type="String">&#12;</Data></Cell>
     <Cell><Data ss:Type="String">ELVIS DE LA GUBIA</Data></Cell>
     <Cell><Data ss:Type="Number">130388</Data></Cell>
     <Cell><Data ss:Type="Number">0</Data></Cell>
     <Cell><Data ss:Type="Number">74.849999999999994</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row ss:AutoFitHeight="0">
+   <Row>
     <Cell><Data ss:Type="Number">31</Data></Cell>
     <Cell><Data ss:Type="Number">14</Data></Cell>
     <Cell><Data ss:Type="String">NEREA AZCUETA ZARANDONA</Data></Cell>
     <Cell><Data ss:Type="Number">277887</Data></Cell>
     <Cell><Data ss:Type="String">C.D. DE HIPICA ARIALDE DE OROBIO</Data></Cell>
+    <Cell><Data ss:Type="String">&#12;</Data></Cell>
     <Cell><Data ss:Type="String">DRAGIBUS D'OLYMPE AA</Data></Cell>
     <Cell><Data ss:Type="Number">170154</Data></Cell>
     <Cell><Data ss:Type="Number">0</Data></Cell>
     <Cell><Data ss:Type="Number">75</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row ss:AutoFitHeight="0">
+   <Row>
     <Cell><Data ss:Type="Number">8</Data></Cell>
     <Cell><Data ss:Type="Number">15</Data></Cell>
     <Cell><Data ss:Type="String">AYLA ARANA LERGA</Data></Cell>
     <Cell><Data ss:Type="Number">228885</Data></Cell>
     <Cell><Data ss:Type="String">CLUB HIPICO ZALDI EDER (GOIHERRI)</Data></Cell>
+    <Cell><Data ss:Type="String">&#12;</Data></Cell>
     <Cell><Data ss:Type="String">EROS DE TAMERVILLE</Data></Cell>
     <Cell><Data ss:Type="Number">143771</Data></Cell>
     <Cell><Data ss:Type="Number">0</Data></Cell>
     <Cell><Data ss:Type="Number">75.28</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row ss:AutoFitHeight="0">
+   <Row>
+    <Cell><Data ss:Type="Number">33</Data></Cell>
+    <Cell><Data ss:Type="Number">16</Data></Cell>
+    <Cell><Data ss:Type="String">XABIER ZABALETA SUSPERREGI</Data></Cell>
+    <Cell><Data ss:Type="Number">3746</Data></Cell>
+    <Cell><Data ss:Type="String">CLUB HIPICO ZALDI EDER (GOIHERRI)</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">ROXETTE HT</Data></Cell>
+    <Cell><Data ss:Type="Number">157140</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">75.33</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
     <Cell><Data ss:Type="Number">13</Data></Cell>
     <Cell><Data ss:Type="Number">17</Data></Cell>
     <Cell><Data ss:Type="String">JULIA ABASCAL VILLA</Data></Cell>
     <Cell><Data ss:Type="Number">152490</Data></Cell>
     <Cell><Data ss:Type="String">CLUB HIPICO BURUBIO</Data></Cell>
+    <Cell><Data ss:Type="String">&#12;</Data></Cell>
     <Cell><Data ss:Type="String">CASASUERTES</Data></Cell>
     <Cell><Data ss:Type="Number">152766</Data></Cell>
     <Cell><Data ss:Type="Number">0</Data></Cell>
     <Cell><Data ss:Type="Number">76.38</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row ss:AutoFitHeight="0">
+   <Row>
     <Cell><Data ss:Type="Number">12</Data></Cell>
     <Cell><Data ss:Type="Number">18</Data></Cell>
     <Cell><Data ss:Type="String">NEREA AZCUETA ZARANDONA</Data></Cell>
     <Cell><Data ss:Type="Number">277887</Data></Cell>
     <Cell><Data ss:Type="String">C.D. DE HIPICA ARIALDE DE OROBIO</Data></Cell>
+    <Cell><Data ss:Type="String">&#12;</Data></Cell>
     <Cell><Data ss:Type="String">KASHMIR</Data></Cell>
     <Cell><Data ss:Type="Number">161233</Data></Cell>
     <Cell><Data ss:Type="Number">0</Data></Cell>
     <Cell><Data ss:Type="Number">77.12</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row ss:AutoFitHeight="0">
+   <Row>
     <Cell><Data ss:Type="Number">11</Data></Cell>
     <Cell><Data ss:Type="Number">19</Data></Cell>
     <Cell><Data ss:Type="String">IZARO MARTINEZ LATXAGA</Data></Cell>
     <Cell><Data ss:Type="Number">219600</Data></Cell>
     <Cell><Data ss:Type="String">HIPICA ARETXALDE DE LEZAMA</Data></Cell>
+    <Cell><Data ss:Type="String">&#12;</Data></Cell>
     <Cell><Data ss:Type="String">LATIKA DE GÜEMES</Data></Cell>
     <Cell><Data ss:Type="Number">132373</Data></Cell>
     <Cell><Data ss:Type="Number">0</Data></Cell>
     <Cell><Data ss:Type="Number">77.489999999999995</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row ss:AutoFitHeight="0">
+   <Row>
+    <Cell><Data ss:Type="Number">2</Data></Cell>
+    <Cell><Data ss:Type="Number">20</Data></Cell>
+    <Cell><Data ss:Type="String">XABIER ZABALETA SUSPERREGI</Data></Cell>
+    <Cell><Data ss:Type="Number">3746</Data></Cell>
+    <Cell><Data ss:Type="String">CLUB HIPICO ZALDI EDER (GOIHERRI)</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">CLINTANA DRUM</Data></Cell>
+    <Cell><Data ss:Type="Number">166797</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">79.400000000000006</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="Number">21</Data></Cell>
+    <Cell><Data ss:Type="Number">21</Data></Cell>
+    <Cell><Data ss:Type="String">DANIEL GONZALEZ MONGE</Data></Cell>
+    <Cell><Data ss:Type="Number">1819</Data></Cell>
+    <Cell><Data ss:Type="String">CLUB HIPICO ZALDI EDER (GOIHERRI)</Data></Cell>
+    <Cell><Data ss:Type="String">false</Data></Cell>
+    <Cell><Data ss:Type="String">UMANDINE VAN HET HAZENPAD</Data></Cell>
+    <Cell><Data ss:Type="Number">168495</Data></Cell>
+    <Cell><Data ss:Type="Number">3</Data></Cell>
+    <Cell><Data ss:Type="Number">83.55</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
     <Cell><Data ss:Type="Number">9</Data></Cell>
     <Cell><Data ss:Type="Number">22</Data></Cell>
     <Cell><Data ss:Type="String">HAIZEA GARMENDIA AJURIA</Data></Cell>
     <Cell><Data ss:Type="Number">242355</Data></Cell>
     <Cell><Data ss:Type="String">HIPICA ARETXALDE DE LEZAMA</Data></Cell>
+    <Cell><Data ss:Type="String">&#12;</Data></Cell>
     <Cell><Data ss:Type="String">PLEASURE FIELD</Data></Cell>
     <Cell><Data ss:Type="Number">130776</Data></Cell>
     <Cell><Data ss:Type="Number">4</Data></Cell>
     <Cell><Data ss:Type="Number">68.02</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row ss:AutoFitHeight="0">
+   <Row>
+    <Cell><Data ss:Type="Number">23</Data></Cell>
+    <Cell><Data ss:Type="Number">23</Data></Cell>
+    <Cell><Data ss:Type="String">CARMEN BARINAGA MAS</Data></Cell>
+    <Cell><Data ss:Type="Number">320006</Data></Cell>
+    <Cell><Data ss:Type="String">HIPICA ARETXALDE DE LEZAMA</Data></Cell>
+    <Cell><Data ss:Type="String">&#12;</Data></Cell>
+    <Cell><Data ss:Type="String">RITA DE SAUCO</Data></Cell>
+    <Cell><Data ss:Type="Number">150156</Data></Cell>
+    <Cell><Data ss:Type="Number">4</Data></Cell>
+    <Cell><Data ss:Type="Number">69.98</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
     <Cell><Data ss:Type="Number">27</Data></Cell>
     <Cell><Data ss:Type="Number">24</Data></Cell>
     <Cell><Data ss:Type="String">LORENA MARTINEZ REYERO</Data></Cell>
     <Cell><Data ss:Type="Number">200661</Data></Cell>
     <Cell><Data ss:Type="String">CLUB HIPICO ZALDI EDER (GOIHERRI)</Data></Cell>
+    <Cell><Data ss:Type="String">&#12;</Data></Cell>
     <Cell><Data ss:Type="String">BAYARD D'ELLE</Data></Cell>
     <Cell><Data ss:Type="Number">113728</Data></Cell>
     <Cell><Data ss:Type="Number">4</Data></Cell>
     <Cell><Data ss:Type="Number">70.75</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row ss:AutoFitHeight="0">
+   <Row>
+    <Cell><Data ss:Type="Number">3</Data></Cell>
+    <Cell><Data ss:Type="Number">25</Data></Cell>
+    <Cell><Data ss:Type="String">ADRIANA CATALAN CONDE</Data></Cell>
+    <Cell><Data ss:Type="Number">275520</Data></Cell>
+    <Cell><Data ss:Type="String">HIPICA ARETXALDE DE LEZAMA</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">BRAVEHEART YAR 275520</Data></Cell>
+    <Cell><Data ss:Type="Number">275520</Data></Cell>
+    <Cell><Data ss:Type="Number">4</Data></Cell>
+    <Cell><Data ss:Type="Number">71.56</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
     <Cell><Data ss:Type="Number">28</Data></Cell>
     <Cell><Data ss:Type="Number">26</Data></Cell>
     <Cell><Data ss:Type="String">SABRINA CUEVAS BUISAC</Data></Cell>
     <Cell><Data ss:Type="Number">168146</Data></Cell>
     <Cell><Data ss:Type="String">CLUB HIPICO MUNGIA</Data></Cell>
+    <Cell><Data ss:Type="String">&#12;</Data></Cell>
     <Cell><Data ss:Type="String">CHICAGO VEBE Z</Data></Cell>
     <Cell><Data ss:Type="Number">171136</Data></Cell>
     <Cell><Data ss:Type="Number">4</Data></Cell>
     <Cell><Data ss:Type="Number">74.33</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row ss:AutoFitHeight="0">
+   <Row>
     <Cell><Data ss:Type="Number">19</Data></Cell>
     <Cell><Data ss:Type="Number">27</Data></Cell>
     <Cell><Data ss:Type="String">IÑIGO GONZÁLEZ ORAINDI</Data></Cell>
     <Cell><Data ss:Type="Number">247295</Data></Cell>
     <Cell><Data ss:Type="String">HIPIKA LEMOIZ / IGO SPORT HORSES</Data></Cell>
+    <Cell><Data ss:Type="String">&#12;</Data></Cell>
     <Cell><Data ss:Type="String">ODIN GP</Data></Cell>
     <Cell><Data ss:Type="Number">156787</Data></Cell>
     <Cell><Data ss:Type="Number">4</Data></Cell>
     <Cell><Data ss:Type="Number">74.92</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row ss:AutoFitHeight="0">
+   <Row>
     <Cell><Data ss:Type="Number">5</Data></Cell>
     <Cell><Data ss:Type="Number">28</Data></Cell>
     <Cell><Data ss:Type="String">ALEX SAGARDUY BENGOA</Data></Cell>
     <Cell><Data ss:Type="Number">219125</Data></Cell>
     <Cell><Data ss:Type="String">HIPICA ARETXALDE DE LEZAMA</Data></Cell>
+    <Cell><Data ss:Type="String">&#12;</Data></Cell>
     <Cell><Data ss:Type="String">VIVA LA VIDA LR</Data></Cell>
     <Cell><Data ss:Type="Number">134277</Data></Cell>
     <Cell><Data ss:Type="Number">4</Data></Cell>
     <Cell><Data ss:Type="Number">75.33</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row ss:AutoFitHeight="0">
+   <Row>
     <Cell><Data ss:Type="Number">22</Data></Cell>
     <Cell><Data ss:Type="Number">29</Data></Cell>
     <Cell><Data ss:Type="String">BEATRIZ CERECEDA RUIZ</Data></Cell>
     <Cell><Data ss:Type="Number">219474</Data></Cell>
     <Cell><Data ss:Type="String">CLUB HIPICO ZALDI EDER (GOIHERRI)</Data></Cell>
+    <Cell><Data ss:Type="String">&#12;</Data></Cell>
     <Cell><Data ss:Type="String">JEKYLL AME</Data></Cell>
     <Cell><Data ss:Type="Number">165045</Data></Cell>
     <Cell><Data ss:Type="Number">12</Data></Cell>
     <Cell><Data ss:Type="Number">78.680000000000007</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
+   <Row>
+    <Cell><Data ss:Type="Number">24</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">PAULA ARNAIZ CUENCA</Data></Cell>
+    <Cell><Data ss:Type="Number">157468</Data></Cell>
+    <Cell><Data ss:Type="String">HIPICA ARETXALDE DE LEZAMA</Data></Cell>
+    <Cell><Data ss:Type="String">&#12;</Data></Cell>
+    <Cell><Data ss:Type="String">GANGSTER D’ESTIVE</Data></Cell>
+    <Cell><Data ss:Type="Number">164687</Data></Cell>
+    <Cell><Data ss:Type="String">EL</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="Number">29</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">NEREA ROBLES AGUIRRE</Data></Cell>
+    <Cell><Data ss:Type="Number">193642</Data></Cell>
+    <Cell><Data ss:Type="String">CLUB HIPICO MUNGIA</Data></Cell>
+    <Cell><Data ss:Type="String">false</Data></Cell>
+    <Cell><Data ss:Type="String">GENIALE M-G C LEUZE</Data></Cell>
+    <Cell><Data ss:Type="Number">137430</Data></Cell>
+    <Cell><Data ss:Type="String">RET</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="Number">30</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">FELIPE VILLANUEVA LOPEZ</Data></Cell>
+    <Cell><Data ss:Type="Number">167063</Data></Cell>
+    <Cell><Data ss:Type="String">CLUB HIPICO MUNGIA</Data></Cell>
+    <Cell><Data ss:Type="String">false</Data></Cell>
+    <Cell><Data ss:Type="String">SIN CINATY</Data></Cell>
+    <Cell><Data ss:Type="Number">143962</Data></Cell>
+    <Cell><Data ss:Type="String">EL</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
   </Table>
   <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
-   <Unsynced/>
    <Selected/>
    <Panes>
     <Pane>
      <Number>3</Number>
-     <ActiveRow>14</ActiveRow>
-     <RangeSelection>R15</RangeSelection>
+     <ActiveRow>32</ActiveRow>
+     <RangeSelection>R33:R34</RangeSelection>
     </Pane>
    </Panes>
    <ProtectObjects>False</ProtectObjects>
