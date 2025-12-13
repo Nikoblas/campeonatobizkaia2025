@@ -110,6 +110,7 @@
                 <th *ngIf="datos[0]?.mostrarClasificacion">{{ 'competitionTable.table.classification' | translate }}</th>
                 <th>{{ 'common.labels.rider' | translate }}</th>
                 <th>{{ 'common.labels.horse' | translate }}</th>
+                <th>{{ 'common.labels.club' | translate }}</th>
                 <th class="total-column">{{ 'common.labels.total' | translate }}</th>
                 <th>{{ 'common.days.saturday' | translate }}</th>
                 <th>{{ 'common.days.sunday' | translate }}</th>
@@ -226,6 +227,7 @@
                   </span>
                 </td>
                 <td>{{ dato.caballo | uppercase }}</td>
+                <td>{{ dato.club | uppercase }}</td>
                 <td class="total-column">{{ dato.total }}</td>
                 <td
                   [title]="getTooltipText(dato.sabado)"

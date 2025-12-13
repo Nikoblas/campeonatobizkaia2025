@@ -24,6 +24,7 @@ interface CompetitionData {
   clasificacion: number;
   nombreJinete: string;
   caballo: string;
+  club: string;
   total: number;
   sabado: CompetitionDay;
   domingo: CompetitionDay;
@@ -331,6 +332,11 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
                 filaElegida['Cab'] ||
                 filaElegida['CAB'] ||
                 filaElegida['cab'] ||
+                '',
+              club:
+                filaElegida['Club'] ||
+                filaElegida['CLUB'] ||
+                filaElegida['club'] ||
                 '',
             };
           }
@@ -1064,6 +1070,8 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
       const baseData: any = {
         Clasificación: dato.mostrarClasificacion ? dato.clasificacion : '',
         Jinete: dato.nombreJinete,
+        Caballo: dato.caballo,
+        Club: dato.club,
         Total: dato.total,
         'Sábado Puntos': dato.sabado.puntos,
         'Sábado Tiempo': dato.sabado.tiempo,
@@ -1189,6 +1197,7 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
               ${this.datos[0]?.mostrarClasificacion ? '<th>Clas.</th>' : ''}
               <th>Jinete</th>
               <th>Caballo</th>
+              <th>Club</th>
               <th class="total-column">Total</th>
               <th>Sábado</th>
               <th>Domingo</th>
@@ -1210,6 +1219,7 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
                   ${dato.nombreJinete.toUpperCase()}
                 </td>
                 <td>${dato.caballo.toUpperCase()}</td>
+                <td>${dato.club ? dato.club.toUpperCase() : '-'}</td>
                 <td class="total-column">${dato.total}</td>
                 <td>
                   ${
