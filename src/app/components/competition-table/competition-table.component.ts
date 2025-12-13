@@ -449,6 +449,18 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
             resultadosValidos++;
           }
         }
+        // Para categorías 080 y 100, usar el tiempo del domingo como desempate
+        if (this.categoriaSeleccionada === '080' || this.categoriaSeleccionada === '100') {
+          if (jinete.domingo && jinete.domingo.tiempo && jinete.domingo.tiempo !== '-') {
+            jinete.desempate = {
+              puntos: '-',
+              tiempo: jinete.domingo.tiempo,
+              caballo: jinete.domingo.caballo || '-',
+              cl: '-'
+            };
+          }
+        }
+
         return {
           ...jinete,
           total,
@@ -477,17 +489,20 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
     let tiempoDesempateAnterior: number | null = null;
 
     // Aplicar clasificación al orden final (ya ordenado correctamente)
+    const usarSoloTiempo = this.categoriaSeleccionada === '080' || this.categoriaSeleccionada === '100';
     ordenados = ordenFinal.map((jinete: any) => {
       const puntosDesempate = this.obtenerPuntosDesempate(jinete.desempate);
-      const tiempoDesempate = this.convertirTiempoASegundos(
-        jinete.desempate?.tiempo || '-'
-      );
+      // Para categorías 080 y 100, usar el tiempo del domingo directamente
+      const tiempoDesempate = usarSoloTiempo
+        ? this.convertirTiempoASegundos(jinete.domingo?.tiempo || '-')
+        : this.convertirTiempoASegundos(jinete.desempate?.tiempo || '-');
 
       // Verificar si cambió el criterio de clasificación
+      // Para categorías 080 y 100, solo considerar total y tiempo del domingo (no puntos de desempate)
       const cambioClasificacion =
         totalAnterior === null ||
         jinete.total !== totalAnterior ||
-        puntosDesempate !== puntosDesempateAnterior ||
+        (!usarSoloTiempo && puntosDesempate !== puntosDesempateAnterior) ||
         tiempoDesempate !== tiempoDesempateAnterior;
 
       if (cambioClasificacion) {
@@ -700,7 +715,22 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
    * Ordena un grupo de jinetes empatados aplicando las reglas de desempate
    */
   private ordenarGrupoConDesempate(grupo: any[]): any[] {
+    // Para categorías 080 y 100, solo usar el tiempo del domingo (sin puntos)
+    const usarSoloTiempo = this.categoriaSeleccionada === '080' || this.categoriaSeleccionada === '100';
+
     return grupo.sort((a: any, b: any) => {
+      if (usarSoloTiempo) {
+        // Solo ordenar por tiempo del domingo directamente
+        const tiempoDomingoA = this.convertirTiempoASegundos(
+          a.domingo?.tiempo || '-'
+        );
+        const tiempoDomingoB = this.convertirTiempoASegundos(
+          b.domingo?.tiempo || '-'
+        );
+        return tiempoDomingoA - tiempoDomingoB;
+      }
+
+      // Para otras categorías, usar la lógica normal (puntos primero, luego tiempo)
       // Primero por puntos del desempate (menor es mejor)
       const puntosDesempateA = this.obtenerPuntosDesempate(a.desempate);
       const puntosDesempateB = this.obtenerPuntosDesempate(b.desempate);
@@ -725,6 +755,11 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
    * Obtiene los puntos del desempate para ordenamiento
    */
   private obtenerPuntosDesempate(desempate: CompetitionDay): number {
+    // Para categorías 080 y 100, siempre devolver 0 ya que solo se usa el tiempo
+    if (this.categoriaSeleccionada === '080' || this.categoriaSeleccionada === '100') {
+      return 0;
+    }
+
     if (
       !desempate ||
       desempate.puntos === undefined ||
@@ -753,9 +788,53 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Formatea la visualización del domingo
+   * Para categorías 080 y 100 muestra "puntos/tiempo", para otras solo puntos
+   */
+  formatearDomingo(domingo: CompetitionDay): string {
+    const usarSoloTiempo = this.categoriaSeleccionada === '080' || this.categoriaSeleccionada === '100';
+    
+    if (!domingo || domingo.puntos === undefined || domingo.puntos === null || domingo.puntos === '-') {
+      return '-';
+    }
+
+    // Verificar si es eliminación
+    const esEliminacion =
+      typeof domingo.puntos === 'string' &&
+      ['EL', 'E', 'R', 'ELI', 'RET', 'NC'].includes(domingo.puntos.toUpperCase());
+
+    if (esEliminacion) {
+      // Si es NC, mostrar "NO CONTINUA", sino "Eliminado"
+      if (typeof domingo.puntos === 'string' && domingo.puntos.toUpperCase() === 'NC') {
+        return 'NO CONTINUA';
+      }
+      return 'Eliminado';
+    }
+
+    const puntos = domingo.puntos;
+    const tiempo = domingo.tiempo || '-';
+
+    // Para categorías 080 y 100, mostrar "puntos/tiempo"
+    if (usarSoloTiempo) {
+      return `${puntos}/${tiempo}`;
+    }
+
+    // Para otras categorías, solo mostrar puntos
+    return `${puntos}`;
+  }
+
+  /**
    * Formatea la visualización del desempate (puntos/tiempo)
    */
   formatearDesempate(desempate: CompetitionDay): string {
+    // Para categorías 080 y 100, mostrar solo el tiempo
+    const usarSoloTiempo = this.categoriaSeleccionada === '080' || this.categoriaSeleccionada === '100';
+
+    if (usarSoloTiempo) {
+      const tiempo = desempate?.tiempo || '-';
+      return tiempo;
+    }
+
     // Verificar si es eliminación
     const esEliminacion =
       typeof desempate.puntos === 'string' &&
@@ -779,6 +858,15 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
    * Verifica si un jinete tiene desempate válido para mostrar estilos especiales
    */
   tieneDesempateValido(dato: CompetitionData): boolean {
+    // Para categorías 080 y 100, solo verificar si tiene tiempo válido
+    const usarSoloTiempo = this.categoriaSeleccionada === '080' || this.categoriaSeleccionada === '100';
+    
+    if (usarSoloTiempo) {
+      return !!(dato.desempate && 
+                dato.desempate.tiempo && 
+                dato.desempate.tiempo !== '-');
+    }
+
     // Verificar si tiene datos de desempate válidos
     if (
       !dato.desempate ||
@@ -971,21 +1059,29 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const datosExcel = this.datos.map((dato, index) => ({
-      Clasificación: dato.mostrarClasificacion ? dato.clasificacion : '',
-      Jinete: dato.nombreJinete,
-      Total: dato.total,
-      'Sábado Puntos': dato.sabado.puntos,
-      'Sábado Tiempo': dato.sabado.tiempo,
-      'Sábado Caballo': dato.sabado.caballo,
-      'Domingo Puntos': dato.domingo.puntos,
-      'Domingo Tiempo': dato.domingo.tiempo,
-      'Domingo Caballo': dato.domingo.caballo,
-      'Desempate Puntos': dato.desempate.puntos,
-      'Desempate Tiempo': dato.desempate.tiempo,
-      'Desempate Caballo': dato.desempate.caballo,
-      'Desempate Formateado': this.formatearDesempate(dato.desempate),
-    }));
+    const usarSoloTiempo = this.categoriaSeleccionada === '080' || this.categoriaSeleccionada === '100';
+    const datosExcel = this.datos.map((dato, index) => {
+      const baseData: any = {
+        Clasificación: dato.mostrarClasificacion ? dato.clasificacion : '',
+        Jinete: dato.nombreJinete,
+        Total: dato.total,
+        'Sábado Puntos': dato.sabado.puntos,
+        'Sábado Tiempo': dato.sabado.tiempo,
+        'Sábado Caballo': dato.sabado.caballo,
+        'Domingo': usarSoloTiempo ? this.formatearDomingo(dato.domingo) : dato.domingo.puntos,
+        'Domingo Tiempo': dato.domingo.tiempo,
+        'Domingo Caballo': dato.domingo.caballo,
+      };
+      
+      if (!usarSoloTiempo) {
+        baseData['Desempate Puntos'] = dato.desempate.puntos;
+        baseData['Desempate Tiempo'] = dato.desempate.tiempo;
+        baseData['Desempate Caballo'] = dato.desempate.caballo;
+        baseData['Desempate Formateado'] = this.formatearDesempate(dato.desempate);
+      }
+      
+      return baseData;
+    });
 
     const ws = XLSX.utils.json_to_sheet(datosExcel);
     const wb = XLSX.utils.book_new();
@@ -1096,7 +1192,7 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
               <th class="total-column">Total</th>
               <th>Sábado</th>
               <th>Domingo</th>
-              <th>Desempate</th>
+              ${(this.categoriaSeleccionada !== '080' && this.categoriaSeleccionada !== '100') ? '<th>Desempate</th>' : ''}
             </tr>
           </thead>
           <tbody>
@@ -1124,16 +1220,11 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
                   }
                 </td>
                 <td>
-                  ${
-                    dato.domingo?.puntos !== undefined &&
-                    dato.domingo?.puntos !== null
-                      ? dato.domingo.puntos
-                      : '-'
-                  }
+                  ${this.formatearDomingo(dato.domingo)}
                 </td>
-                <td>
+                ${(this.categoriaSeleccionada !== '080' && this.categoriaSeleccionada !== '100') ? `<td>
                   ${this.formatearDesempate(dato.desempate)}
-                </td>
+                </td>` : ''}
               </tr>
             `
               )

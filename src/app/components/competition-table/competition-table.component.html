@@ -113,7 +113,7 @@
                 <th class="total-column">{{ 'common.labels.total' | translate }}</th>
                 <th>{{ 'common.days.saturday' | translate }}</th>
                 <th>{{ 'common.days.sunday' | translate }}</th>
-                <th>{{ 'common.labels.tiebreak' | translate }}</th>
+                <th *ngIf="categoriaSeleccionada !== '080' && categoriaSeleccionada !== '100'">{{ 'common.labels.tiebreak' | translate }}</th>
               </tr>
             </thead>
             <tbody>
@@ -242,14 +242,10 @@
                   [title]="getTooltipText(dato.domingo)"
                   [class.tooltip-bottom]="i >= datos.length - 3"
                 >
-                  {{
-                    dato.domingo.puntos !== undefined &&
-                    dato.domingo.puntos !== null
-                      ? dato.domingo.puntos
-                      : "-"
-                  }}
+                  {{ formatearDomingo(dato.domingo) | uppercase }}
                 </td>
                 <td
+                  *ngIf="categoriaSeleccionada !== '080' && categoriaSeleccionada !== '100'"
                   [title]="getTooltipText(dato.desempate)"
                   [class.tooltip-bottom]="i >= datos.length - 3"
                 >
