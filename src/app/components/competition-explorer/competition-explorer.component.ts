@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { CompetitionService } from '../../services/competition.service';
 import {
-  CompetitionService,
   CompetitionFileData,
   CompetitionRow,
-} from '../../services/competition.service';
+} from '../../models/competition.model';
 import { TranslateService } from '../../services/translate.service';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import * as XLSX from 'xlsx';

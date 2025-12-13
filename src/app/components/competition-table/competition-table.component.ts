@@ -2,37 +2,19 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
+import { CompetitionService } from '../../services/competition.service';
 import {
-  CompetitionService,
   EquipoEntry,
-} from '../../services/competition.service';
+  PRUEBAS,
+  ELIMINACIONES,
+  CompetitionDay,
+  CompetitionData,
+} from '../../models/competition.model';
 import { TranslateService } from '../../services/translate.service';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom, Subscription } from 'rxjs';
 import * as XLSX from 'xlsx';
-
-interface CompetitionDay {
-  puntos: number | string;
-  caballo: string;
-  tiempo: string;
-  cl: string;
-  tachado?: boolean;
-}
-
-interface CompetitionData {
-  clasificacion: number;
-  nombreJinete: string;
-  caballo: string;
-  club: string;
-  total: number;
-  sabado: CompetitionDay;
-  domingo: CompetitionDay;
-  desempate: CompetitionDay;
-  resultadosValidos: number;
-  mostrarClasificacion: boolean;
-  eliminaciones: number; // Nuevo atributo para contar eliminaciones
-}
 
 @Component({
   selector: 'app-competition-table',
@@ -257,11 +239,7 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
     const concurso = 'SEDE';
     const datosConcurso =
       this.competitionService.getAllCompetitionData(concurso);
-    const pruebas = [
-      { key: 'sabado', dia: 'SABADO' },
-      { key: 'domingo', dia: 'DOMINGO' },
-      { key: 'desempate', dia: 'DESEMPATE' },
-    ];
+    const pruebas = [...PRUEBAS];
 
     const datosCategoria = datosConcurso.filter(
       (d) => d.categoria === this.categoriaSeleccionada
@@ -345,40 +323,30 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
           // Verificar si es eliminación en el valor original
           const esEliminacion =
             puntosOriginal &&
-            ['EL', 'E', 'R', 'ELI', 'RET', 'NC'].includes(
+            ELIMINACIONES.includes(
               ('' + puntosOriginal).toUpperCase()
             );
 
+          // Si es eliminación, guardar los datos pero se excluirá después
           let puntosMostrar: number | string;
           let clMostrar: string;
 
-          if (esEliminacion) {
-            // Para eliminaciones, buscar el peor resultado de la categoría + 20
-            puntosMostrar = this.procesarPuntosEliminadoIndividual(
-              puntosOriginal,
-              licencia,
-              datosConcurso,
-              this.categoriaSeleccionada,
-              prueba.dia
-            );
-            clMostrar = ('' + puntosOriginal).toUpperCase();
-          } else {
-            // Para puntos normales, convertir a número si es posible
-            const puntosNum =
-              typeof puntosOriginal === 'number'
-                ? puntosOriginal
-                : typeof puntosOriginal === 'string' &&
-                  !isNaN(Number(puntosOriginal))
-                ? Number(puntosOriginal)
-                : puntosOriginal;
-            puntosMostrar = puntosNum ?? 0; // Si no hay resultado, usar 0
-            clMostrar =
-              filaElegida['Cl'] ||
+          // Para puntos normales, convertir a número si es posible
+          const puntosNum =
+            typeof puntosOriginal === 'number'
+              ? puntosOriginal
+              : typeof puntosOriginal === 'string' &&
+                !isNaN(Number(puntosOriginal))
+              ? Number(puntosOriginal)
+              : puntosOriginal;
+          puntosMostrar = puntosNum ?? 0; // Si no hay resultado, usar 0
+          clMostrar = esEliminacion
+            ? ('' + puntosOriginal).toUpperCase()
+            : filaElegida['Cl'] ||
               filaElegida['CL'] ||
               filaElegida['cl'] ||
               filaElegida['Posicion'] ||
               '-';
-          }
           jinetesMap[licencia][prueba.key] = {
             puntos:
               prueba.key === 'desempate'
@@ -422,21 +390,16 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
           return null; // Será filtrado después
         }
 
-        // Contar eliminaciones (E, EL, ELI, RET, NC) usando puntos originales
-        let eliminaciones = 0;
+        // Verificar eliminaciones (E, EL, ELI, RET, NC) usando puntos originales
+        // Si tiene al menos una eliminación, excluir de la clasificación
         for (const p of ['sabado', 'domingo']) {
           const puntosOriginales = jinete[p]?.puntosOriginal;
           if (
             typeof puntosOriginales === 'string' &&
-            ['EL', 'E', 'R', 'ELI', 'RET', 'NC'].includes(puntosOriginales.toUpperCase())
+            ELIMINACIONES.includes(puntosOriginales.toUpperCase())
           ) {
-            eliminaciones++;
+            return null; // Excluir si tiene cualquier eliminación
           }
-        }
-
-        // Si tiene 2 o más eliminaciones, excluir de la clasificación
-        if (eliminaciones >= 2) {
-          return null; // Será filtrado después
         }
 
         let total = 0;
@@ -471,7 +434,7 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
           ...jinete,
           total,
           resultadosValidos,
-          eliminaciones, // Agregar el contador de eliminaciones
+          eliminaciones: 0, // Ya no se usa, pero se mantiene para compatibilidad
           resultados: ['sabado', 'domingo'].map(
             (p) => jinete[p]?.puntos
           ),

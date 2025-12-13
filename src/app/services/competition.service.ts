@@ -9,57 +9,29 @@ import {
   BehaviorSubject,
 } from 'rxjs';
 import * as XLSX from 'xlsx';
-
-export interface CompetitionRow {
-  [key: string]: any; // Todos los campos del Excel
-}
-
-export interface CompetitionFileData {
-  concurso: string; // Ej: 'CIZUR'
-  dia: string; // Ej: 'SABADO' o 'DOMINGO'
-  categoria: string; // Ej: '065', '080', '100', etc.
-  datos: CompetitionRow[];
-  archivo: string; // Nombre del archivo
-}
-
-export interface EquipoEntry {
-  equipo: string;
-  jefeEquipo: string;
-  licencia: string;
-}
-
-export interface AdmitidoEntry {
-  lic: string;
-  lac: string;
-}
-
-export interface CompetitionImportResult {
-  resultados: CompetitionFileData[];
-  faltantes: string[];
-}
-
-interface ResultadoDia {
-  licencia: string;
-  jinete: string;
-  caballo: string;
-  club: string;
-  puntos: number;
-  tiempo: string;
-}
+import {
+  CompetitionRow,
+  CompetitionFileData,
+  EquipoEntry,
+  AdmitidoEntry,
+  CompetitionImportResult,
+  ResultadoDia,
+  CONCURSOS,
+  CATEGORIAS,
+  DIAS,
+  LICENCIA_KEYS,
+  ATLETA_KEYS,
+  CL_KEYS,
+  ELIMINACIONES,
+} from '../models/competition.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CompetitionService {
-  private readonly concursos = ['SEDE'];
-  private readonly categorias = [
-    '080',
-    '100',
-    '110',
-    '120',
-    '130',
-  ];
-  private readonly dias = ['SABADO', 'DOMINGO', 'DESEMPATE'];
+  private readonly concursos = [...CONCURSOS];
+  private readonly categorias = [...CATEGORIAS];
+  private readonly dias = [...DIAS];
 
   private datosMemoria: { [concurso: string]: CompetitionFileData[] } = {};
   private faltantesMemoria: { [concurso: string]: string[] } = {};
@@ -435,17 +407,17 @@ export class CompetitionService {
             .map((row: any) => limpiarPuntos(row['Puntos']))
             .filter((v: any) => typeof v === 'number' && !isNaN(v))
         );
-        // Limpiar puntos y asignar el máximo+20 a EL/RET
+        // Limpiar puntos y mantener eliminaciones como están (sin sumar puntos)
         jsonData = jsonData.map((row: any) => {
           const valor = row['Puntos'];
           if (
             typeof valor === 'string' &&
-            ['EL', 'ELI', 'E', 'R', 'RET'].includes(valor.trim().toUpperCase())
+            ELIMINACIONES.includes(valor.trim().toUpperCase() as any)
           ) {
             const valMayus = valor.trim().toUpperCase();
             return {
               ...row,
-              Puntos: maxPuntos + 20,
+              Puntos: valor, // Mantener el valor original de eliminación
               Cl: valMayus,
               CL: valMayus,
               cl: valMayus,
@@ -455,10 +427,10 @@ export class CompetitionService {
         });
 
         // Lógica especial para 'EL' y 'RET' en puntos por jinete/licencia
-        const licenciaKey = ['Licencia', 'LICENCIA', 'licencia'];
-        const atletaKey = ['Atleta', 'Jinete', 'NOMBRE JINETE'];
+        const licenciaKey = [...LICENCIA_KEYS];
+        const atletaKey = [...ATLETA_KEYS];
         const puntosKey = 'Puntos';
-        const clKey = ['Cl', 'CL', 'cl'];
+        const clKey = [...CL_KEYS];
         const mapLicencia: {
           [lic: string]: { lastClNum: number | null; elValue: number | null };
         } = {};
@@ -492,17 +464,10 @@ export class CompetitionService {
           }
           if (
             typeof valor === 'string' &&
-            ['EL', 'ELI', 'E', 'R', 'RET'].includes(valor.trim().toUpperCase())
+            ELIMINACIONES.includes(valor.trim().toUpperCase() as any)
           ) {
-            if (mapLicencia[licencia].elValue !== null) {
-              row[puntosKey] = mapLicencia[licencia].elValue;
-            } else if (mapLicencia[licencia].lastClNum !== null && mapLicencia[licencia].lastClNum !== undefined) {
-              row[puntosKey] = mapLicencia[licencia].lastClNum! + 20;
-              mapLicencia[licencia].elValue = row[puntosKey];
-            } else {
-              row[puntosKey] = 20; // Si no hay ningún resultado anterior, se pone 20
-              mapLicencia[licencia].elValue = 20;
-            }
+            // Mantener el valor original de eliminación sin procesar
+            row[puntosKey] = valor;
           } else if (
             !(
               clValor !== undefined &&
@@ -584,7 +549,7 @@ export class CompetitionService {
                 const valMayus = valor.trim().toUpperCase();
                 return {
                   ...row,
-                  Puntos: maxPuntos + 20,
+                  Puntos: valor, // Mantener el valor original de eliminación
                   Cl: valMayus,
                   CL: valMayus,
                   cl: valMayus,
@@ -592,10 +557,10 @@ export class CompetitionService {
               }
               return { ...row, Puntos: limpiarPuntos(valor) };
             });
-            const licenciaKey = ['Licencia', 'LICENCIA', 'licencia'];
-            const atletaKey = ['Atleta', 'Jinete', 'NOMBRE JINETE'];
+            const licenciaKey = [...LICENCIA_KEYS];
+            const atletaKey = [...ATLETA_KEYS];
             const puntosKey = 'Puntos';
-            const clKey = ['Cl', 'CL', 'cl'];
+            const clKey = [...CL_KEYS];
             const mapLicencia: {
               [lic: string]: {
                 lastClNum: number | null;
@@ -773,7 +738,7 @@ function normalizarFilas(jsonData: any[]): any[] {
       const valMayus = valor.trim().toUpperCase();
       return {
         ...row,
-        Puntos: maxPuntos + 20,
+        Puntos: valor, // Mantener el valor original de eliminación
         Cl: valMayus,
         CL: valMayus,
         cl: valMayus,
@@ -783,10 +748,10 @@ function normalizarFilas(jsonData: any[]): any[] {
   });
 
   // Lógica especial ELI/EL por licencia
-  const licenciaKey = ['Licencia', 'LICENCIA', 'licencia'];
-  const atletaKey = ['Atleta', 'Jinete', 'NOMBRE JINETE'];
+  const licenciaKey = [...LICENCIA_KEYS];
+  const atletaKey = [...ATLETA_KEYS];
   const puntosKey = 'Puntos';
-  const clKey = ['Cl', 'CL', 'cl'];
+  const clKey = [...CL_KEYS];
   const mapLicencia: {
     [lic: string]: { lastClNum: number | null; elValue: number | null };
   } = {};

@@ -5,30 +5,15 @@ import { Router } from '@angular/router';
 import { CompetitionService } from '../../../services/competition.service';
 import { TranslateService } from '../../../services/translate.service';
 import { TranslatePipe } from '../../../pipes/translate.pipe';
+import {
+  DIAS_BASE,
+  PRIORIDAD_COLUMNAS,
+  ResultadoJinete,
+  SugerenciaBusqueda,
+} from '../../../models/competition.model';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import * as XLSX from 'xlsx';
-
-interface ResultadoJinete {
-  concurso: string;
-  dia: string;
-  categoria: string;
-  tiempo: string;
-  puntos: number;
-  total: number;
-  caballo: string;
-  lac: string;
-  club: string;
-  nombre: string;
-  licencia: string;
-}
-
-interface SugerenciaBusqueda {
-  nombre: string;
-  caballo: string;
-  tipo: 'jinete' | 'caballo';
-  licencia?: string;
-}
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -372,7 +357,7 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   exportarClasificacion(concurso: string, categoria: string) {
-    const diasBase = ['SABADO', 'DOMINGO'];
+    const diasBase = [...DIAS_BASE];
     const mapa: Map<string, { licencia: string; nombre: string; club: string; caballo?: string; resultados: { dia: string; puntos: number; tiempo?: string; fueEL: boolean; fueELI: boolean; }[]; eliminaciones: number; totalPuntos: number; tiempoDesempate?: number; } > = new Map();
 
     // Cargar resultados de los 3 días
@@ -489,18 +474,7 @@ export class AdminDashboardComponent implements OnInit {
       });
     });
     const ordenadas = Object.keys(contador).sort((a, b) => contador[b] - contador[a]);
-    const prioridad = [
-      'Clas', 'CL', 'Cl', 'cl', 'Posicion',
-      'Dorsal', 'DORSAL', 'dorsal', 'No. caballo',
-      'Puntos', 'PUNTOS', 'puntos', 'Faltas',
-      'Tiempo', 'TIEMPO', 'tiempo',
-      'Atleta', 'Jinete', 'NOMBRE JINETE', 'nombre',
-      'Licencia', 'LICENCIA', 'licencia',
-      'Caballo', 'CABALLO', 'caballo',
-      'Club', 'CLUB', 'club',
-      'Reg',
-      'Total', 'TOTAL', 'total'
-    ];
+    const prioridad = [...PRIORIDAD_COLUMNAS];
     const setOrdenadas = new Set(ordenadas);
     const cabeceras: string[] = [];
     prioridad.forEach((p) => { if (setOrdenadas.has(p)) cabeceras.push(p); });
