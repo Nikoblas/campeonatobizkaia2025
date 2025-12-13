@@ -40,7 +40,7 @@
   </Style>
  </Styles>
  <Worksheet ss:Name="Sheet1">
-  <Table ss:ExpandedColumnCount="10" ss:ExpandedRowCount="21" x:FullColumns="1"
+  <Table ss:ExpandedColumnCount="10" ss:ExpandedRowCount="20" x:FullColumns="1"
    x:FullRows="1" ss:DefaultColumnWidth="200.25" ss:DefaultRowHeight="15">
    <Column ss:Width="39.75"/>
    <Column ss:Width="20.25"/>
@@ -52,7 +52,7 @@
    <Column ss:Width="90"/>
    <Column ss:Width="60"/>
    <Column ss:Width="69.75"/>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell ss:StyleID="s62"><Data ss:Type="String">O.S.</Data></Cell>
     <Cell ss:StyleID="s62"><Data ss:Type="String">Cl</Data></Cell>
     <Cell ss:StyleID="s62"><Data ss:Type="String">Atleta</Data></Cell>
@@ -64,19 +64,7 @@
     <Cell ss:StyleID="s62"><Data ss:Type="String">Tiempo</Data></Cell>
     <Cell ss:StyleID="s62"><Data ss:Type="String">Premios</Data></Cell>
    </Row>
-   <Row>
-    <Cell><Data ss:Type="Number">16</Data></Cell>
-    <Cell><Data ss:Type="Number">5</Data></Cell>
-    <Cell><Data ss:Type="String">GARAZI LANDETA SMITH</Data></Cell>
-    <Cell><Data ss:Type="Number">237184</Data></Cell>
-    <Cell><Data ss:Type="String">HIPICA ARETXALDE DE LEZAMA</Data></Cell>
-    <Cell><Data ss:Type="String">ERMIONE DU VAL JOUEN</Data></Cell>
-    <Cell><Data ss:Type="Number">142191</Data></Cell>
-    <Cell><Data ss:Type="Number">0</Data></Cell>
-    <Cell><Data ss:Type="Number">66.56</Data></Cell>
-    <Cell><Data ss:Type="String"></Data></Cell>
-   </Row>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="Number">7</Data></Cell>
     <Cell><Data ss:Type="Number">7</Data></Cell>
     <Cell><Data ss:Type="String">IRAIA SAINZ MARTINEZ</Data></Cell>
@@ -88,7 +76,7 @@
     <Cell><Data ss:Type="Number">68.319999999999993</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="Number">18</Data></Cell>
     <Cell><Data ss:Type="Number">8</Data></Cell>
     <Cell><Data ss:Type="String">MAITANE PÉREZ RAMÓN</Data></Cell>
@@ -100,7 +88,7 @@
     <Cell><Data ss:Type="Number">69.84</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="Number">14</Data></Cell>
     <Cell><Data ss:Type="Number">9</Data></Cell>
     <Cell><Data ss:Type="String">ANE AIZPURU RUILOBA</Data></Cell>
@@ -112,7 +100,7 @@
     <Cell><Data ss:Type="Number">69.900000000000006</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="Number">25</Data></Cell>
     <Cell><Data ss:Type="Number">10</Data></Cell>
     <Cell><Data ss:Type="String">ERIK HERNANI IJALBA</Data></Cell>
@@ -124,7 +112,7 @@
     <Cell><Data ss:Type="Number">72.010000000000005</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="Number">17</Data></Cell>
     <Cell><Data ss:Type="Number">11</Data></Cell>
     <Cell><Data ss:Type="String">OIHANE GARCIA URTASUN</Data></Cell>
@@ -136,7 +124,7 @@
     <Cell><Data ss:Type="Number">72.180000000000007</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="Number">6</Data></Cell>
     <Cell><Data ss:Type="Number">12</Data></Cell>
     <Cell><Data ss:Type="String">NAROA DE LA VEGA UGARTE</Data></Cell>
@@ -148,7 +136,7 @@
     <Cell><Data ss:Type="Number">73.84</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="Number">1</Data></Cell>
     <Cell><Data ss:Type="Number">13</Data></Cell>
     <Cell><Data ss:Type="String">SABRINA CUEVAS BUISAC</Data></Cell>
@@ -160,7 +148,7 @@
     <Cell><Data ss:Type="Number">74.849999999999994</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="Number">31</Data></Cell>
     <Cell><Data ss:Type="Number">14</Data></Cell>
     <Cell><Data ss:Type="String">NEREA AZCUETA ZARANDONA</Data></Cell>
@@ -172,7 +160,7 @@
     <Cell><Data ss:Type="Number">75</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="Number">8</Data></Cell>
     <Cell><Data ss:Type="Number">15</Data></Cell>
     <Cell><Data ss:Type="String">AYLA ARANA LERGA</Data></Cell>
@@ -184,7 +172,7 @@
     <Cell><Data ss:Type="Number">75.28</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="Number">13</Data></Cell>
     <Cell><Data ss:Type="Number">17</Data></Cell>
     <Cell><Data ss:Type="String">JULIA ABASCAL VILLA</Data></Cell>
@@ -196,7 +184,7 @@
     <Cell><Data ss:Type="Number">76.38</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="Number">12</Data></Cell>
     <Cell><Data ss:Type="Number">18</Data></Cell>
     <Cell><Data ss:Type="String">NEREA AZCUETA ZARANDONA</Data></Cell>
@@ -208,7 +196,7 @@
     <Cell><Data ss:Type="Number">77.12</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="Number">11</Data></Cell>
     <Cell><Data ss:Type="Number">19</Data></Cell>
     <Cell><Data ss:Type="String">IZARO MARTINEZ LATXAGA</Data></Cell>
@@ -220,7 +208,7 @@
     <Cell><Data ss:Type="Number">77.489999999999995</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="Number">9</Data></Cell>
     <Cell><Data ss:Type="Number">22</Data></Cell>
     <Cell><Data ss:Type="String">HAIZEA GARMENDIA AJURIA</Data></Cell>
@@ -232,7 +220,7 @@
     <Cell><Data ss:Type="Number">68.02</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="Number">23</Data></Cell>
     <Cell><Data ss:Type="Number">23</Data></Cell>
     <Cell><Data ss:Type="String">CARMEN BARINAGA MAS</Data></Cell>
@@ -244,7 +232,7 @@
     <Cell><Data ss:Type="Number">69.98</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="Number">27</Data></Cell>
     <Cell><Data ss:Type="Number">24</Data></Cell>
     <Cell><Data ss:Type="String">LORENA MARTINEZ REYERO</Data></Cell>
@@ -256,7 +244,7 @@
     <Cell><Data ss:Type="Number">70.75</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="Number">28</Data></Cell>
     <Cell><Data ss:Type="Number">26</Data></Cell>
     <Cell><Data ss:Type="String">SABRINA CUEVAS BUISAC</Data></Cell>
@@ -268,7 +256,7 @@
     <Cell><Data ss:Type="Number">74.33</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="Number">19</Data></Cell>
     <Cell><Data ss:Type="Number">27</Data></Cell>
     <Cell><Data ss:Type="String">IÑIGO GONZÁLEZ ORAINDI</Data></Cell>
@@ -280,7 +268,7 @@
     <Cell><Data ss:Type="Number">74.92</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="Number">5</Data></Cell>
     <Cell><Data ss:Type="Number">28</Data></Cell>
     <Cell><Data ss:Type="String">ALEX SAGARDUY BENGOA</Data></Cell>
@@ -292,7 +280,7 @@
     <Cell><Data ss:Type="Number">75.33</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="Number">22</Data></Cell>
     <Cell><Data ss:Type="Number">29</Data></Cell>
     <Cell><Data ss:Type="String">BEATRIZ CERECEDA RUIZ</Data></Cell>
@@ -306,12 +294,13 @@
    </Row>
   </Table>
   <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <Unsynced/>
    <Selected/>
    <Panes>
     <Pane>
      <Number>3</Number>
-     <ActiveRow>12</ActiveRow>
-     <ActiveCol>3</ActiveCol>
+     <ActiveRow>1</ActiveRow>
+     <RangeSelection>R2</RangeSelection>
     </Pane>
    </Panes>
    <ProtectObjects>False</ProtectObjects>
