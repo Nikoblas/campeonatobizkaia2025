@@ -6,6 +6,8 @@ import {
   CompetitionService,
   EquipoEntry,
 } from '../../services/competition.service';
+import { TranslateService } from '../../services/translate.service';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom, Subscription } from 'rxjs';
 import * as XLSX from 'xlsx';
@@ -34,7 +36,7 @@ interface CompetitionData {
 @Component({
   selector: 'app-competition-table',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, TranslatePipe],
   templateUrl: './competition-table.component.html',
   styleUrls: ['./competition-table.component.scss'],
 })
@@ -43,6 +45,11 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
   categoriaSeleccionada: string = 'inicio';
   datos: CompetitionData[] = [];
   cargando: boolean = false;
+  idiomas: { codigo: string; nombre: string }[] = [
+    { codigo: 'es', nombre: 'Español' },
+    { codigo: 'eus', nombre: 'Euskera' }
+  ];
+  idiomaSeleccionado: string = 'es';
   private subscriptions: Subscription[] = [];
 
   // Grupos de categorías compatibles (ya no aplica con las nuevas categorías)
@@ -54,10 +61,16 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
 
   constructor(
     private competitionService: CompetitionService,
+    private translateService: TranslateService,
     private http: HttpClient,
     private route: ActivatedRoute,
     private router: Router
   ) {}
+
+  // Método helper para traducir en el componente
+  t(key: string, params?: { [key: string]: string }): string {
+    return this.translateService.translate(key, params);
+  }
 
   getCategoriaVisual(categoria: string): string {
     return this.competitionService.getCategoriaVisual(categoria);
@@ -65,6 +78,14 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.categorias = this.competitionService.getCategorias();
+    
+    // Cargar idioma guardado o usar el idioma actual del servicio
+    const idiomaGuardado = localStorage.getItem('idiomaSeleccionado');
+    if (idiomaGuardado && this.idiomas.some(i => i.codigo === idiomaGuardado)) {
+      this.idiomaSeleccionado = idiomaGuardado;
+    } else {
+      this.idiomaSeleccionado = this.translateService.getCurrentLang();
+    }
     
     // Inicializar datos como array vacío para que el mensaje de estado vacío funcione
     this.datos = [];
@@ -162,6 +183,11 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
     this.cargarDatos();
   }
 
+  cambiarIdioma() {
+    localStorage.setItem('idiomaSeleccionado', this.idiomaSeleccionado);
+    this.translateService.loadTranslations(this.idiomaSeleccionado);
+  }
+
   refrescarDatos() {
     const categoriaAnterior = this.categoriaSeleccionada;
     localStorage.setItem('categoriaSeleccionada', categoriaAnterior);
@@ -186,9 +212,7 @@ export class CompetitionTableComponent implements OnInit, OnDestroy {
       window.URL.revokeObjectURL(link.href);
     } catch (error) {
       console.error('Error al descargar el PDF:', error);
-      alert(
-        'Error al descargar el PDF. Por favor, inténtalo de nuevo más tarde.'
-      );
+      alert(this.t('errors.downloadPdf'));
     }
   }
 

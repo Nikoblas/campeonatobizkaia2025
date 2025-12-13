@@ -1,11 +1,11 @@
 <div class="admin-container">
   <div class="admin-header">
-    <h1>Panel de Administración</h1>
+    <h1>{{ 'admin.panel.title' | translate }}</h1>
     <div class="header-right">
       <button class="back-btn" (click)="volverAResultados()">
-        ← Volver a Resultados
+        {{ 'admin.panel.backToResults' | translate }}
       </button>
-      <button class="logout-btn" (click)="logout()">Cerrar Sesión</button>
+      <button class="logout-btn" (click)="logout()">{{ 'admin.panel.logout' | translate }}</button>
     </div>
   </div>
 
@@ -15,14 +15,14 @@
       (click)="activeTab = 'buscador'"
       class="tab-btn"
     >
-      Buscador
+      {{ 'admin.panel.tabs.search' | translate }}
     </button>
     <button
       [class.active]="activeTab === 'resultados'"
       (click)="activeTab = 'resultados'"
       class="tab-btn"
     >
-      Resultados
+      {{ 'admin.panel.tabs.results' | translate }}
     </button>
   </div>
 
@@ -30,8 +30,8 @@
   <div *ngIf="activeTab === 'resultados'" class="tab-content">
     <div class="judge-downloads-header">
       <div class="title">
-        <h2>Descargas para jueces</h2>
-        <p>Descarga por categoría el resumen (como la tabla pública) o plantillas.</p>
+        <h2>{{ 'admin.judgeDownloads.title' | translate }}</h2>
+        <p>{{ 'admin.judgeDownloads.description' | translate }}</p>
       </div>
     </div>
 
@@ -40,11 +40,11 @@
       <div class="categoria-action" *ngFor="let cat of categorias">
         <span class="cat-name">{{ getCategoriaVisual(cat) }}</span>
         <div class="action-buttons">
-          <button class="export-excel-btn" (click)="exportarClasificacion('SEDE', cat)" title="Descargar categoría unificada">
-            ⬇️ Descargar categoría
+          <button class="export-excel-btn" (click)="exportarClasificacion('SEDE', cat)" [title]="'admin.judgeDownloads.downloadCategory' | translate">
+            {{ 'admin.judgeDownloads.downloadCategory' | translate }}
           </button>
-          <button class="template-btn" (click)="descargarPlantillaCategoria('SEDE', cat)" title="Descargar plantilla categoría">
-            📄 Plantilla categoría
+          <button class="template-btn" (click)="descargarPlantillaCategoria('SEDE', cat)" [title]="'admin.judgeDownloads.templateCategory' | translate">
+            {{ 'admin.judgeDownloads.templateCategory' | translate }}
           </button>
         </div>
       </div>
@@ -63,15 +63,15 @@
                   <button
                     class="template-btn"
                     (click)="descargarPlantilla(concurso, dia, categoria)"
-                    title="Descargar plantilla Excel"
+                    [title]="'admin.judgeDownloads.template' | translate"
                   >
-                    📄 Plantilla
+                    {{ 'admin.judgeDownloads.template' | translate }}
                   </button>
                   <button
                     class="import-btn"
                     (click)="importExcel(concurso, dia, categoria)"
                   >
-                    Importar Excel
+                    {{ 'admin.judgeDownloads.importExcel' | translate }}
                   </button>
                 </div>
               </div>
@@ -79,36 +79,36 @@
                 *ngIf="hasData(concurso, dia, categoria)"
                 class="data-status"
               >
-                <span>Datos cargados</span>
+                <span>{{ 'admin.judgeDownloads.dataLoaded' | translate }}</span>
                 <div class="actions">
                   <button
                     class="open-excel-btn"
                     (click)="abrirExcel(concurso, dia, categoria)"
-                    title="Abrir Excel original"
+                    [title]="'admin.judgeDownloads.open' | translate"
                   >
-                    <i class="fas fa-file-excel"></i> Abrir
+                    <i class="fas fa-file-excel"></i> {{ 'admin.judgeDownloads.open' | translate }}
                   </button>
                   <button
                     class="download-csv-btn"
                     (click)="descargarCSV(concurso, dia, categoria)"
-                    title="Descargar CSV de la categoría"
+                    [title]="'admin.judgeDownloads.csv' | translate"
                   >
-                    ⬇️ CSV
+                    {{ 'admin.judgeDownloads.csv' | translate }}
                   </button>
                   <button
                     class="export-excel-btn"
                     (click)="exportarExcel(concurso, dia, categoria)"
-                    title="Exportar Excel de lo visible"
+                    [title]="'admin.judgeDownloads.excel' | translate"
                   >
-                    ⬇️ Excel
+                    {{ 'admin.judgeDownloads.excel' | translate }}
                   </button>
                   <button
                     *ngIf="dia === 'DOMINGO'"
                     class="export-excel-btn"
                     (click)="exportarClasificacion(concurso, categoria)"
-                    title="Exportar clasificación (sumatorio, ELI, desempate)"
+                    [title]="'admin.judgeDownloads.classification' | translate"
                   >
-                    🏆 Clasificación
+                    {{ 'admin.judgeDownloads.classification' | translate }}
                   </button>
                 </div>
               </div>
@@ -128,7 +128,7 @@
             type="text"
             [(ngModel)]="searchTerm"
             (input)="onSearchInput($any($event.target).value)"
-            placeholder="Buscar jinete o caballo..."
+            [placeholder]="'admin.search.placeholder' | translate"
             class="search-input"
             autocomplete="off"
           />
@@ -161,22 +161,22 @@
         </div>
       </div>
 
-      <div *ngIf="isLoading" class="loading">Buscando...</div>
+      <div *ngIf="isLoading" class="loading">{{ 'common.messages.searching' | translate }}</div>
 
       <div *ngIf="resultadosBusqueda.length > 0" class="results-table">
         <table>
           <thead>
             <tr>
-              <th>Concurso</th>
-              <th>Día</th>
-              <th>Categoría</th>
-              <th>Jinete</th>
-              <th>Licencia</th>
-              <th>Caballo</th>
+              <th>{{ 'admin.search.tableHeaders.competition' | translate }}</th>
+              <th>{{ 'common.labels.day' | translate }}</th>
+              <th>{{ 'common.labels.category' | translate }}</th>
+              <th>{{ 'common.labels.rider' | translate }}</th>
+              <th>{{ 'common.labels.license' | translate }}</th>
+              <th>{{ 'common.labels.horse' | translate }}</th>
               <th>Lac</th>
-              <th>Tiempo</th>
-              <th>Puntos</th>
-              <th>Club</th>
+              <th>{{ 'common.labels.time' | translate }}</th>
+              <th>{{ 'common.labels.points' | translate }}</th>
+              <th>{{ 'common.labels.club' | translate }}</th>
             </tr>
           </thead>
           <tbody>
@@ -200,7 +200,7 @@
         *ngIf="!isLoading && searchTerm && resultadosBusqueda.length === 0"
         class="no-results"
       >
-        No se encontraron resultados para "{{ searchTerm }}"
+        {{ 'admin.search.noResults' | translate: { searchTerm: searchTerm } }}
       </div>
     </div>
   </div>

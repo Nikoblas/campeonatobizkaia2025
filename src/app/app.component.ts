@@ -3,7 +3,9 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 import { CompetitionService } from './services/competition.service';
-import { Observable } from 'rxjs';
+import { TranslateService } from './services/translate.service';
+import { Observable, combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { WhatsappButtonComponent } from './components/whatsapp-button/whatsapp-button.component';
 
 @Component({
@@ -16,11 +18,11 @@ import { WhatsappButtonComponent } from './components/whatsapp-button/whatsapp-b
     WhatsappButtonComponent,
   ],
   template: `
-    <app-loading-spinner *ngIf="!(datosListos$ | async)"></app-loading-spinner>
+    <app-loading-spinner *ngIf="!(todoListo$ | async)"></app-loading-spinner>
     <div *ngIf="errorCarga$ | async as error" class="error-message">
       {{ error }}
     </div>
-    <router-outlet *ngIf="datosListos$ | async"></router-outlet>
+    <router-outlet *ngIf="todoListo$ | async"></router-outlet>
     <app-whatsapp-button></app-whatsapp-button>
   `,
   styles: [
@@ -48,10 +50,22 @@ export class AppComponent implements OnInit {
   mostrarPopupResultados = false;
 
   datosListos$: Observable<boolean>;
+  traduccionesListas$: Observable<boolean>;
+  todoListo$: Observable<boolean>;
   errorCarga$: Observable<string | null>;
 
-  constructor(private competitionService: CompetitionService) {
+  constructor(
+    private competitionService: CompetitionService,
+    private translateService: TranslateService
+  ) {
     this.datosListos$ = this.competitionService.datosListos$;
+    this.traduccionesListas$ = this.translateService.getTranslationsLoaded$();
+    this.todoListo$ = combineLatest([
+      this.datosListos$,
+      this.traduccionesListas$
+    ]).pipe(
+      map(([datosListos, traduccionesListas]) => datosListos && traduccionesListas)
+    );
     this.errorCarga$ = this.competitionService.errorCarga;
   }
 

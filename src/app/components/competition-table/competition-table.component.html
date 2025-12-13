@@ -1,17 +1,27 @@
 <div class="container">
   <div class="header">
     <div class="header-left">
-      <h1>Resumen de Campeonato de Bizkaia de Salto 2025</h1>
-      <div class="category-selector">
-        <label for="categoria">Vista:</label>
+      <h1>{{ 'app.summary' | translate }}</h1>
+      <div class="selectors-container">
         <select
           id="categoria"
+          class="styled-select"
           [(ngModel)]="categoriaSeleccionada"
           (change)="cambiarCategoria()"
         >
-          <option value="inicio">Inicio</option>
+          <option value="inicio">{{ 'competitionTable.home.start' | translate }}</option>
           <option *ngFor="let cat of categorias" [value]="cat">
             {{ getCategoriaVisual(cat) }}
+          </option>
+        </select>
+        <select
+          id="idioma"
+          class="styled-select"
+          [(ngModel)]="idiomaSeleccionado"
+          (change)="cambiarIdioma()"
+        >
+          <option *ngFor="let idioma of idiomas" [value]="idioma.codigo">
+            {{ idioma.nombre }}
           </option>
         </select>
       </div>
@@ -22,7 +32,7 @@
       [disabled]="cargando"
     >
       <i class="fas fa-refresh" [class.fa-spin]="cargando"></i>
-      {{ cargando ? "Cargando..." : "Refrescar" }}
+      {{ cargando ? ('common.buttons.loading' | translate) : ('common.buttons.refresh' | translate) }}
     </button>
     <!--     <button class="explorer-btn" routerLink="/explorer">
       <i class="fas fa-search"></i>
@@ -33,7 +43,7 @@
   <div class="content">
     <ng-container *ngIf="categoriaSeleccionada === 'inicio'; else tablaVista">
       <div class="inicio-container">
-        <h2>Clasificaciones por Categoría</h2>
+        <h2>{{ 'competitionTable.home.title' | translate }}</h2>
         <div class="categorias-buttons">
           <button
             *ngFor="let cat of categorias"
@@ -45,13 +55,13 @@
           </button>
         </div>
 
-        <h2 class="mt-5">Bases del Campeonato de Bizkaia de Salto 2025</h2>
+        <h2 class="mt-5">{{ 'competitionTable.home.championshipRules' | translate }}</h2>
         <button
           class="concurso-btn normativa-btn"
           (click)="descargarPDF('avance')"
         >
           <i class="fas fa-file-pdf"></i>
-          DESCARGAR AVANCE 2025
+          {{ 'competitionTable.home.downloadAdvance' | translate }}
         </button>
         <br />
         <button
@@ -59,7 +69,7 @@
           (click)="descargarPDF('normativa')"
         >
           <i class="fas fa-file-pdf"></i>
-          DESCARGAR NORMATIVA 2025
+          {{ 'competitionTable.home.downloadRules' | translate }}
         </button>
       </div>
     </ng-container>
@@ -68,7 +78,7 @@
       <div class="table-container">
           <div class="table-header">
             <h2>
-              Clasificación {{ getCategoriaVisual(categoriaSeleccionada) }}
+              {{ 'competitionTable.table.title' | translate }} {{ getCategoriaVisual(categoriaSeleccionada) }}
             </h2>
             <div class="header-buttons">
               <button
@@ -77,7 +87,7 @@
                 [disabled]="datos.length === 0"
               >
                 <i class="fas fa-download"></i>
-                Descargar Excel
+                {{ 'competitionTable.table.downloadExcel' | translate }}
               </button>
               <button
                 class="print-btn"
@@ -85,28 +95,25 @@
                 [disabled]="datos.length === 0"
               >
                 <i class="fas fa-print"></i>
-                Imprimir
+                {{ 'common.buttons.print' | translate }}
               </button>
             </div>
           </div>
           <div *ngIf="datos && datos.length === 0" class="empty-state">
             <p>
-              Todavía no hay resultados disponibles para esta categoría. El
-              comité organizador publicará los listados a medida que finalicen
-              las pruebas y se validen los datos. Por favor, vuelve a intentarlo
-              en unos minutos.
+              {{ 'competitionTable.table.emptyState' | translate }}
             </p>
           </div>
           <table class="competition-table" *ngIf="datos.length > 0">
             <thead>
               <tr>
-                <th *ngIf="datos[0]?.mostrarClasificacion">Clas.</th>
-                <th>Jinete</th>
-                <th>Caballo</th>
-                <th class="total-column">Total</th>
-                <th>Sábado</th>
-                <th>Domingo</th>
-                <th>Desempate</th>
+                <th *ngIf="datos[0]?.mostrarClasificacion">{{ 'competitionTable.table.classification' | translate }}</th>
+                <th>{{ 'common.labels.rider' | translate }}</th>
+                <th>{{ 'common.labels.horse' | translate }}</th>
+                <th class="total-column">{{ 'common.labels.total' | translate }}</th>
+                <th>{{ 'common.days.saturday' | translate }}</th>
+                <th>{{ 'common.days.sunday' | translate }}</th>
+                <th>{{ 'common.labels.tiebreak' | translate }}</th>
               </tr>
             </thead>
             <tbody>

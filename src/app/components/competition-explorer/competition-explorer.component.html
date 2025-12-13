@@ -3,16 +3,16 @@
     <div class="header-left">
       <button class="back-btn" routerLink="/">
         <i class="fas fa-arrow-left"></i>
-        Volver al Resumen
+        {{ 'explorer.backToSummary' | translate }}
       </button>
     </div>
     <div class="header-center">
-      <h1>Explorador de Resultados</h1>
+      <h1>{{ 'explorer.title' | translate }}</h1>
     </div>
     <div class="header-right">
       <button class="admin-btn" routerLink="/admin/login">
         <i class="fas fa-lock"></i>
-        Panel Admin
+        {{ 'explorer.adminPanel' | translate }}
       </button>
     </div>
   </div>
@@ -22,14 +22,14 @@
       <!-- Sede única: se elimina selector de concurso/sede -->
 
       <div class="filter-group">
-        <label for="dia">Día:</label>
+        <label for="dia">{{ 'common.labels.day' | translate }}:</label>
         <select id="dia" [(ngModel)]="diaSeleccionado" (change)="cargarDatos()">
           <option *ngFor="let dia of dias" [value]="dia">{{dia}}</option>
         </select>
       </div>
 
       <div class="filter-group">
-        <label for="categoria">Categoría:</label>
+        <label for="categoria">{{ 'common.labels.category' | translate }}:</label>
         <select id="categoria" [(ngModel)]="categoriaSeleccionada" (change)="cargarDatos()">
           <option *ngFor="let categoria of categorias" [value]="categoria">{{getCategoriaVisual(categoria)}}</option>
         </select>
@@ -38,10 +38,10 @@
 
     <div class="results">
       <div class="results-header">
-        <h2>Resultados {{ concursoSeleccionado }} - {{ diaSeleccionado }} - {{ getCategoriaVisual(categoriaSeleccionada) }}</h2>
+        <h2>{{ 'explorer.results' | translate }} {{ concursoSeleccionado }} - {{ diaSeleccionado }} - {{ getCategoriaVisual(categoriaSeleccionada) }}</h2>
         <button class="download-btn" (click)="descargarExcel()" [disabled]="datos.length === 0">
           <i class="fas fa-download"></i>
-          Descargar Excel
+          {{ 'competitionTable.table.downloadExcel' | translate }}
         </button>
       </div>
       <table class="results-table">
@@ -65,7 +65,7 @@
       <button class="close-btn" (click)="cerrarPopup()">
         <i class="fas fa-times"></i>
       </button>
-      <h2>Detalles del Resultado</h2>
+      <h2>{{ 'explorer.details.title' | translate }}</h2>
       <div class="popup-details" *ngIf="filaSeleccionada">
         <div *ngFor="let columna of columnasPrincipales" class="detail-row">
           <span class="detail-label">{{columna}}:</span>

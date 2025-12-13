@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CompetitionService } from '../../../services/competition.service';
+import { TranslateService } from '../../../services/translate.service';
+import { TranslatePipe } from '../../../pipes/translate.pipe';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import * as XLSX from 'xlsx';
@@ -31,7 +33,7 @@ interface SugerenciaBusqueda {
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, TranslatePipe],
   templateUrl: './admin-dashboard.component.html',
   styleUrls: ['./admin-dashboard.component.scss'],
 })
@@ -52,6 +54,7 @@ export class AdminDashboardComponent implements OnInit {
   constructor(
     private router: Router,
     private competitionService: CompetitionService,
+    private translateService: TranslateService,
     private http: HttpClient
   ) {
     this.searchSubject
@@ -59,6 +62,11 @@ export class AdminDashboardComponent implements OnInit {
       .subscribe((term) => {
         this.buscarSugerencias(term);
       });
+  }
+
+  // Método helper para traducir en el componente
+  t(key: string, params?: { [key: string]: string }): string {
+    return this.translateService.translate(key, params);
   }
 
   ngOnInit() {

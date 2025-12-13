@@ -7,12 +7,14 @@ import {
   CompetitionFileData,
   CompetitionRow,
 } from '../../services/competition.service';
+import { TranslateService } from '../../services/translate.service';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-competition-explorer',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, TranslatePipe],
   templateUrl: './competition-explorer.component.html',
   styleUrls: ['./competition-explorer.component.scss'],
 })
@@ -39,7 +41,10 @@ export class CompetitionExplorerComponent {
   filaSeleccionada: CompetitionRow | null = null;
   mostrarPopup = false;
 
-  constructor(private competitionService: CompetitionService) {
+  constructor(
+    private competitionService: CompetitionService,
+    private translateService: TranslateService
+  ) {
     this.concursos = this.competitionService.getConcursos();
     this.dias = this.competitionService.getDias();
     this.categorias = this.competitionService.getCategorias().slice(1);
@@ -47,6 +52,11 @@ export class CompetitionExplorerComponent {
     this.diaSeleccionado = this.dias[0];
     this.categoriaSeleccionada = this.categorias[0];
     this.cargarDatos();
+  }
+
+  // Método helper para traducir en el componente
+  t(key: string, params?: { [key: string]: string }): string {
+    return this.translateService.translate(key, params);
   }
 
   getCategoriaVisual(categoria: string): string {
@@ -78,7 +88,7 @@ export class CompetitionExplorerComponent {
 
   descargarExcel() {
     if (this.datos.length === 0) {
-      alert('No hay datos para descargar');
+      alert(this.t('common.messages.noResults'));
       return;
     }
 

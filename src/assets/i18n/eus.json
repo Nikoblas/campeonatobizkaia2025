@@ -1,0 +1,118 @@
+{
+  "common": {
+    "buttons": {
+      "refresh": "Errefreskatu",
+      "loading": "Kargatzen...",
+      "download": "Deskargatu",
+      "print": "Inprimatu",
+      "back": "Atzera",
+      "access": "Sarbidea",
+      "close": "Itxi",
+      "save": "Gorde",
+      "cancel": "Ezeztatu",
+      "search": "Bilatu"
+    },
+    "labels": {
+      "category": "Categoría",
+      "day": "Egun",
+      "rider": "Zaldizkoa",
+      "horse": "Zaldia",
+      "total": "Guztira",
+      "classification": "Klaseazioa",
+      "tiebreak": "Berdinketa haustea",
+      "license": "Lizentzia",
+      "time": "Denbora",
+      "points": "Puntuak",
+      "club": "Kluba",
+      "competition": "Lehiaketa",
+      "password": "Pasahitza"
+    },
+    "days": {
+      "saturday": "Larunbata",
+      "sunday": "Igandea"
+    },
+    "messages": {
+      "noResults": "Ez da emaitzarik aurkitu",
+      "searching": "Bilatzen...",
+      "error": "Akatza",
+      "success": "Ondo"
+    }
+  },
+  "app": {
+    "title": "Bizkaiko Oztopo-jauziko 2025eko Txapelketaren sailkapena 2025",
+    "summary": " Bizkaiko Oztopo-jauziko 2025eko Txapelketaren laburpena 2025"
+  },
+  "competitionTable": {
+    "home": {
+      "title": "Kategoriaren araberako sailkapena",
+      "championshipRules": "Bizkaiko Oztopo-jauziko 2025eko Txapelketaren oinarriak",
+      "downloadAdvance": "2025EKO EGITARAUA JAITSI",
+      "downloadRules": "2025EKO ARAUDIA JAISI",
+      "start": "Hasiera"
+    },
+    "table": {
+      "title": "SAILKAPENA",
+      "classification": "Clas.",
+      "emptyState": "Oraindik ez dago emaitzarik kategoria honetarako. Batzorde antolatzaileak zerrendak argitaratuko ditu probak amaitu eta datuak baliozkotu ahala. Mesedez, saiatu berriro minutu batzuk barru.",
+      "downloadExcel": "Excela jaitsi"
+    }
+  },
+  "admin": {
+    "panel": {
+      "title": "Administrazio panela",
+      "backToResults": "← Emailtzetara itzuli",
+      "logout": "Saioa itxi",
+      "tabs": {
+        "search": "Bilatzailea",
+        "results": "Emaitzak"
+      }
+    },
+    "judgeDownloads": {
+      "title": "Epaileentzako deskarga",
+      "description": "Laburpena kategoriaren arabera deskargatu.",
+      "downloadCategory": "⬇️ Mailaren arabera deskargatu",
+      "templateCategory": "📄 Kategoriaren plantilla",
+      "template": "📄 Plantilla",
+      "importExcel": "Excela inportatu",
+      "dataLoaded": "Datuak kargatuak",
+      "open": "Ireki",
+      "csv": "⬇️ CSV",
+      "excel": "⬇️ Excela",
+      "classification": "🏆 Sailkapena"
+    },
+    "search": {
+      "placeholder": "Zaldizkoa edo zaldia bilatu...",
+      "noResults": "Ez da emaitzarik aurkitu \"{{searchTerm}}\"",
+      "tableHeaders": {
+        "competition": "Lehiaketa",
+        "day": "Eguna",
+        "category": "Kategoria",
+        "rider": "Zaldizkoa",
+        "license": "Lizentzia",
+        "horse": "Zaldia",
+        "lac": "UZL",
+        "time": "Denbora",
+        "points": "Puntuak",
+        "club": "Kluba"
+      }
+    },
+    "login": {
+      "title": "Administratzailearen sarbidea",
+      "backToResults": "← Emaitzetara itzuli",
+      "wrongPassword": "Pasahitza okerra"
+    }
+  },
+  "explorer": {
+    "title": "Emaitzak arakatzailea",
+    "backToSummary": "Laburpenera itzuli",
+    "adminPanel": "Administrazio panela",
+    "results": "Emaitzak",
+    "details": {
+      "title": "Emaitzaren xehetasunak"
+    }
+  },
+  "errors": {
+    "downloadPdf": "Akatsa. Mesedez saiatu beranduago / Akatsa PDFa deskargatzean. Mesedez saiatu beranduago."
+  }
+}
+
