@@ -53,20 +53,20 @@
    <Column ss:Width="69.75"/>
    <Column ss:Width="60"/>
    <Column ss:Width="69.75"/>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell ss:StyleID="s62"><Data ss:Type="String">O.S.</Data></Cell>
     <Cell ss:StyleID="s62"><Data ss:Type="String">Cl</Data></Cell>
     <Cell ss:StyleID="s62"><Data ss:Type="String">Atleta</Data></Cell>
-    <Cell ss:StyleID="s62"><Data ss:Type="String">Licencia</Data></Cell>
+    <Cell ss:StyleID="s62"><Data ss:Type="String">lic</Data></Cell>
     <Cell ss:StyleID="s62"><Data ss:Type="String">Club</Data></Cell>
     <Cell ss:StyleID="s62"><Data ss:Type="String">Opta a Campeonato</Data></Cell>
     <Cell ss:StyleID="s62"><Data ss:Type="String">Caballo</Data></Cell>
-    <Cell ss:StyleID="s62"><Data ss:Type="String">Licencia</Data></Cell>
+    <Cell ss:StyleID="s62"><Data ss:Type="String">lac</Data></Cell>
     <Cell ss:StyleID="s62"><Data ss:Type="String">Puntos</Data></Cell>
     <Cell ss:StyleID="s62"><Data ss:Type="String">Tiempo</Data></Cell>
     <Cell ss:StyleID="s62"><Data ss:Type="String">Premios</Data></Cell>
    </Row>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="Number">1</Data></Cell>
     <Cell><Data ss:Type="Number">1</Data></Cell>
     <Cell><Data ss:Type="String">AIORA GEREKIZ ETXEANDIA</Data></Cell>
@@ -79,7 +79,7 @@
     <Cell><Data ss:Type="Number">25.46</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="Number">6</Data></Cell>
     <Cell><Data ss:Type="Number">2</Data></Cell>
     <Cell><Data ss:Type="String">JULIA JUAN IRAZUSTABARRENA</Data></Cell>
@@ -92,7 +92,7 @@
     <Cell><Data ss:Type="Number">26.92</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="Number">5</Data></Cell>
     <Cell><Data ss:Type="Number">3</Data></Cell>
     <Cell><Data ss:Type="String">LUANA BURGOA ARRIZABALAGA</Data></Cell>
@@ -105,7 +105,7 @@
     <Cell><Data ss:Type="Number">27.97</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="Number">4</Data></Cell>
     <Cell><Data ss:Type="Number">4</Data></Cell>
     <Cell><Data ss:Type="String">SONIA SANCHEZ HERRERA</Data></Cell>
@@ -118,7 +118,7 @@
     <Cell><Data ss:Type="Number">28.12</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="Number">2</Data></Cell>
     <Cell><Data ss:Type="Number">5</Data></Cell>
     <Cell><Data ss:Type="String">MADDI ARRUZA RODRIGUEZ</Data></Cell>
@@ -131,7 +131,7 @@
     <Cell><Data ss:Type="Number">28.36</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
    </Row>
-   <Row>
+   <Row ss:AutoFitHeight="0">
     <Cell><Data ss:Type="Number">3</Data></Cell>
     <Cell><Data ss:Type="Number">6</Data></Cell>
     <Cell><Data ss:Type="String">NAHIA EGUREN GOÑI</Data></Cell>
@@ -146,12 +146,13 @@
    </Row>
   </Table>
   <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <Unsynced/>
    <Selected/>
    <Panes>
     <Pane>
      <Number>3</Number>
-     <ActiveRow>7</ActiveRow>
-     <ActiveCol>8</ActiveCol>
+     <ActiveRow>1</ActiveRow>
+     <ActiveCol>3</ActiveCol>
     </Pane>
    </Panes>
    <ProtectObjects>False</ProtectObjects>

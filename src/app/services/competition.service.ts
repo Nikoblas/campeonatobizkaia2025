@@ -356,6 +356,7 @@ export class CompetitionService {
     const baseName = `${dia}${categoria}`;
     const filePathXls = `assets/data/${concurso}/${baseName}.xls`;
     const filePathXlsx = `assets/data/${concurso}/${baseName}.xlsx`;
+    console.log(`[CompetitionService] Intentando cargar archivo: ${baseName} (${concurso})`);
     // Intentar primero .xls y luego .xlsx
     return this.http.get(filePathXls, { responseType: 'arraybuffer' }).pipe(
       map((data) => {
@@ -370,6 +371,7 @@ export class CompetitionService {
         );
         
         // Filtrar por lista de admitidos (lic-lac)
+        const datosAntesFiltro = jsonData.length;
         jsonData = jsonData.filter((row: any) => {
           const lic = (
             row['Lic'] ||
@@ -401,12 +403,18 @@ export class CompetitionService {
           return this.esAdmitido(lic, lac);
         });
         
+        // Log para diagnóstico
+        if (datosAntesFiltro > 0 && jsonData.length === 0) {
+          console.warn(`[CompetitionService] Archivo ${baseName}.xls cargado pero todos los datos fueron filtrados por lista de admitidos. Datos antes del filtro: ${datosAntesFiltro}`);
+        } else if (jsonData.length > 0) {
+          console.log(`[CompetitionService] Archivo ${baseName}.xls cargado correctamente: ${jsonData.length} filas`);
+        }
+        
         // Calcular la puntuación más alta de la tabla (solo valores numéricos)
-        const maxPuntos = Math.max(
-          ...jsonData
-            .map((row: any) => limpiarPuntos(row['Puntos']))
-            .filter((v: any) => typeof v === 'number' && !isNaN(v))
-        );
+        const puntosNumericos = jsonData
+          .map((row: any) => limpiarPuntos(row['Puntos']))
+          .filter((v: any) => typeof v === 'number' && !isNaN(v));
+        const maxPuntos = puntosNumericos.length > 0 ? Math.max(...puntosNumericos) : 0;
         // Limpiar puntos y mantener eliminaciones como están (sin sumar puntos)
         jsonData = jsonData.map((row: any) => {
           const valor = row['Puntos'];
@@ -502,6 +510,7 @@ export class CompetitionService {
             );
             
             // Filtrar por lista de admitidos (lic-lac)
+            const datosAntesFiltroXlsx = jsonData.length;
             jsonData = jsonData.filter((row: any) => {
               const lic = (
                 row['Lic'] ||
@@ -533,11 +542,17 @@ export class CompetitionService {
               return this.esAdmitido(lic, lac);
             });
             
-            const maxPuntos = Math.max(
-              ...jsonData
-                .map((row: any) => limpiarPuntos(row['Puntos']))
-                .filter((v: any) => typeof v === 'number' && !isNaN(v))
-            );
+            // Log para diagnóstico
+            if (datosAntesFiltroXlsx > 0 && jsonData.length === 0) {
+              console.warn(`[CompetitionService] Archivo ${baseName}.xlsx cargado pero todos los datos fueron filtrados por lista de admitidos. Datos antes del filtro: ${datosAntesFiltroXlsx}`);
+            } else if (jsonData.length > 0) {
+              console.log(`[CompetitionService] Archivo ${baseName}.xlsx cargado correctamente: ${jsonData.length} filas`);
+            }
+            
+            const puntosNumericos = jsonData
+              .map((row: any) => limpiarPuntos(row['Puntos']))
+              .filter((v: any) => typeof v === 'number' && !isNaN(v));
+            const maxPuntos = puntosNumericos.length > 0 ? Math.max(...puntosNumericos) : 0;
             jsonData = jsonData.map((row: any) => {
               const valor = row['Puntos'];
               if (
@@ -630,7 +645,10 @@ export class CompetitionService {
               archivo: `${baseName}.xlsx`,
             };
           }),
-          catchError(() => of({ faltante: filePathXls }))
+          catchError(() => {
+            console.warn(`[CompetitionService] No se encontró el archivo: ${baseName}.xls ni ${baseName}.xlsx`);
+            return of({ faltante: filePathXls });
+          })
         );
       })
     );
