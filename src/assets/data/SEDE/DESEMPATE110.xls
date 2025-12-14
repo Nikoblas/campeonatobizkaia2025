@@ -1,2 +1,161 @@
 <?xml version="1.0"?>
-<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:html="http://www.w3.org/TR/REC-html40"><Styles><Style ss:ID="Header"><Font ss:Bold="1"></Font><Borders><Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"></Border></Borders></Style></Styles><Worksheet ss:Name="Sheet1"><Table ss:DefaultColumnWidth="200"><Column ss:Index="1" ss:Width="40"></Column><Column ss:Index="2" ss:Width="20"></Column><Column ss:Index="3" ss:Width="260"></Column><Column ss:Index="4" ss:Width="80"></Column><Column ss:Index="5" ss:Width="260"></Column><Column ss:Index="6" ss:Width="170"></Column><Column ss:Index="7" ss:Width="190"></Column><Column ss:Index="8" ss:Width="80"></Column><Column ss:Index="9" ss:Width="70"></Column><Column ss:Index="10" ss:Width="60"></Column><Column ss:Index="11" ss:Width="70"></Column><Row><Cell ss:StyleID="Header"><Data ss:Type="String">O.S.</Data></Cell><Cell ss:StyleID="Header"><Data ss:Type="String">Cl</Data></Cell><Cell ss:StyleID="Header"><Data ss:Type="String">Atleta</Data></Cell><Cell ss:StyleID="Header"><Data ss:Type="String">Licencia</Data></Cell><Cell ss:StyleID="Header"><Data ss:Type="String">Club</Data></Cell><Cell ss:StyleID="Header"><Data ss:Type="String">Opta a Campeonato</Data></Cell><Cell ss:StyleID="Header"><Data ss:Type="String">Caballo</Data></Cell><Cell ss:StyleID="Header"><Data ss:Type="String">Licencia</Data></Cell><Cell ss:StyleID="Header"><Data ss:Type="String">Puntos</Data></Cell><Cell ss:StyleID="Header"><Data ss:Type="String">Tiempo</Data></Cell><Cell ss:StyleID="Header"><Data ss:Type="String">Premios</Data></Cell></Row><Row><Cell><Data ss:Type="Number">1</Data></Cell><Cell><Data ss:Type="Number">1</Data></Cell><Cell><Data ss:Type="String">AIORA GEREKIZ ETXEANDIA</Data></Cell><Cell><Data ss:Type="Number">277880</Data></Cell><Cell><Data ss:Type="String">HIPICA ARETXALDE DE LEZAMA</Data></Cell><Cell><Data ss:Type="String">&#xF00C;</Data></Cell><Cell><Data ss:Type="String">BAILA DU VEILLON</Data></Cell><Cell><Data ss:Type="Number">144511</Data></Cell><Cell><Data ss:Type="String">0 (0+0)</Data></Cell><Cell><Data ss:Type="Number">25.46</Data></Cell><Cell><Data ss:Type="String"></Data></Cell></Row><Row><Cell><Data ss:Type="Number">6</Data></Cell><Cell><Data ss:Type="Number">2</Data></Cell><Cell><Data ss:Type="String">JULIA JUAN IRAZUSTABARRENA</Data></Cell><Cell><Data ss:Type="Number">219563</Data></Cell><Cell><Data ss:Type="String">HIPICA ARETXALDE DE LEZAMA</Data></Cell><Cell><Data ss:Type="String">&#xF00C;</Data></Cell><Cell><Data ss:Type="String">JARA DE QUIJAS</Data></Cell><Cell><Data ss:Type="Number">90372</Data></Cell><Cell><Data ss:Type="String">0 (0+0)</Data></Cell><Cell><Data ss:Type="Number">26.92</Data></Cell><Cell><Data ss:Type="String"></Data></Cell></Row><Row><Cell><Data ss:Type="Number">5</Data></Cell><Cell><Data ss:Type="Number">3</Data></Cell><Cell><Data ss:Type="String">LUANA BURGOA ARRIZABALAGA</Data></Cell><Cell><Data ss:Type="Number">329650</Data></Cell><Cell><Data ss:Type="String">HIPICA ARETXALDE DE LEZAMA</Data></Cell><Cell><Data ss:Type="String">&#xF00C;</Data></Cell><Cell><Data ss:Type="String">USTINOV DE BREKKA Z</Data></Cell><Cell><Data ss:Type="Number">132687</Data></Cell><Cell><Data ss:Type="String">0 (0+0)</Data></Cell><Cell><Data ss:Type="Number">27.97</Data></Cell><Cell><Data ss:Type="String"></Data></Cell></Row><Row><Cell><Data ss:Type="String"></Data></Cell><Cell><Data ss:Type="String"></Data></Cell><Cell><Data ss:Type="String"></Data></Cell><Cell><Data ss:Type="String"></Data></Cell><Cell><Data ss:Type="String"></Data></Cell><Cell><Data ss:Type="String"></Data></Cell><Cell><Data ss:Type="String"></Data></Cell><Cell><Data ss:Type="String"></Data></Cell><Cell><Data ss:Type="String"></Data></Cell><Cell><Data ss:Type="String"></Data></Cell><Cell><Data ss:Type="String"></Data></Cell></Row><Row><Cell><Data ss:Type="Number">4</Data></Cell><Cell><Data ss:Type="Number">4</Data></Cell><Cell><Data ss:Type="String">SONIA SANCHEZ HERRERA</Data></Cell><Cell><Data ss:Type="Number">314069</Data></Cell><Cell><Data ss:Type="String">PARTICULAR</Data></Cell><Cell><Data ss:Type="String">&#xF00C;</Data></Cell><Cell><Data ss:Type="String">JAMAICA YAR</Data></Cell><Cell><Data ss:Type="Number">139826</Data></Cell><Cell><Data ss:Type="String">0 (0+0)</Data></Cell><Cell><Data ss:Type="Number">28.12</Data></Cell><Cell><Data ss:Type="String"></Data></Cell></Row><Row><Cell><Data ss:Type="Number">2</Data></Cell><Cell><Data ss:Type="Number">5</Data></Cell><Cell><Data ss:Type="String">MADDI ARRUZA RODRIGUEZ</Data></Cell><Cell><Data ss:Type="Number">277883</Data></Cell><Cell><Data ss:Type="String">HIPICA ARETXALDE DE LEZAMA</Data></Cell><Cell><Data ss:Type="String">&#xF00C;</Data></Cell><Cell><Data ss:Type="String">CLARIN DE LLAMOSAS</Data></Cell><Cell><Data ss:Type="Number">128202</Data></Cell><Cell><Data ss:Type="String">0 (0+0)</Data></Cell><Cell><Data ss:Type="Number">28.36</Data></Cell><Cell><Data ss:Type="String"></Data></Cell></Row><Row><Cell><Data ss:Type="Number">3</Data></Cell><Cell><Data ss:Type="Number">6</Data></Cell><Cell><Data ss:Type="String">NAHIA EGUREN GO&#xD1;I</Data></Cell><Cell><Data ss:Type="Number">197903</Data></Cell><Cell><Data ss:Type="String">CLUB HIPICO EQUUS GETXO</Data></Cell><Cell><Data ss:Type="String">&#xF00C;</Data></Cell><Cell><Data ss:Type="String">CANTERVILLE II</Data></Cell><Cell><Data ss:Type="Number">112771</Data></Cell><Cell><Data ss:Type="String">0 (0+0)</Data></Cell><Cell><Data ss:Type="Number">31.12</Data></Cell><Cell><Data ss:Type="String"></Data></Cell></Row></Table></Worksheet></Workbook>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <Version>14.00</Version>
+ </DocumentProperties>
+ <OfficeDocumentSettings xmlns="urn:schemas-microsoft-com:office:office">
+  <AllowPNG/>
+ </OfficeDocumentSettings>
+ <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+  <WindowHeight>9360</WindowHeight>
+  <WindowWidth>9705</WindowWidth>
+  <WindowTopX>270</WindowTopX>
+  <WindowTopY>630</WindowTopY>
+  <ProtectStructure>False</ProtectStructure>
+  <ProtectWindows>False</ProtectWindows>
+ </ExcelWorkbook>
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Bottom"/>
+   <Borders/>
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="11" ss:Color="#000000"/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+  <Style ss:ID="s62">
+   <Alignment ss:Vertical="Bottom"/>
+   <Borders>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+   </Borders>
+   <Font ss:FontName="Arial" ss:Bold="1"/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="Sheet1">
+  <Table ss:ExpandedColumnCount="11" ss:ExpandedRowCount="7" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultColumnWidth="200.25" ss:DefaultRowHeight="15">
+   <Column ss:Width="39.75"/>
+   <Column ss:Width="20.25"/>
+   <Column ss:Width="260.25"/>
+   <Column ss:Width="80.25"/>
+   <Column ss:Width="260.25"/>
+   <Column ss:Width="170.25"/>
+   <Column ss:Width="189.75"/>
+   <Column ss:Width="80.25"/>
+   <Column ss:Width="69.75"/>
+   <Column ss:Width="60"/>
+   <Column ss:Width="69.75"/>
+   <Row>
+    <Cell ss:StyleID="s62"><Data ss:Type="String">O.S.</Data></Cell>
+    <Cell ss:StyleID="s62"><Data ss:Type="String">Cl</Data></Cell>
+    <Cell ss:StyleID="s62"><Data ss:Type="String">Atleta</Data></Cell>
+    <Cell ss:StyleID="s62"><Data ss:Type="String">Licencia</Data></Cell>
+    <Cell ss:StyleID="s62"><Data ss:Type="String">Club</Data></Cell>
+    <Cell ss:StyleID="s62"><Data ss:Type="String">Opta a Campeonato</Data></Cell>
+    <Cell ss:StyleID="s62"><Data ss:Type="String">Caballo</Data></Cell>
+    <Cell ss:StyleID="s62"><Data ss:Type="String">Licencia</Data></Cell>
+    <Cell ss:StyleID="s62"><Data ss:Type="String">Puntos</Data></Cell>
+    <Cell ss:StyleID="s62"><Data ss:Type="String">Tiempo</Data></Cell>
+    <Cell ss:StyleID="s62"><Data ss:Type="String">Premios</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="Number">1</Data></Cell>
+    <Cell><Data ss:Type="Number">1</Data></Cell>
+    <Cell><Data ss:Type="String">AIORA GEREKIZ ETXEANDIA</Data></Cell>
+    <Cell><Data ss:Type="Number">277880</Data></Cell>
+    <Cell><Data ss:Type="String">HIPICA ARETXALDE DE LEZAMA</Data></Cell>
+    <Cell><Data ss:Type="String">&#12;</Data></Cell>
+    <Cell><Data ss:Type="String">BAILA DU VEILLON</Data></Cell>
+    <Cell><Data ss:Type="Number">144511</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">25.46</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="Number">6</Data></Cell>
+    <Cell><Data ss:Type="Number">2</Data></Cell>
+    <Cell><Data ss:Type="String">JULIA JUAN IRAZUSTABARRENA</Data></Cell>
+    <Cell><Data ss:Type="Number">219563</Data></Cell>
+    <Cell><Data ss:Type="String">HIPICA ARETXALDE DE LEZAMA</Data></Cell>
+    <Cell><Data ss:Type="String">&#12;</Data></Cell>
+    <Cell><Data ss:Type="String">JARA DE QUIJAS</Data></Cell>
+    <Cell><Data ss:Type="Number">90372</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">26.92</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="Number">5</Data></Cell>
+    <Cell><Data ss:Type="Number">3</Data></Cell>
+    <Cell><Data ss:Type="String">LUANA BURGOA ARRIZABALAGA</Data></Cell>
+    <Cell><Data ss:Type="Number">329650</Data></Cell>
+    <Cell><Data ss:Type="String">HIPICA ARETXALDE DE LEZAMA</Data></Cell>
+    <Cell><Data ss:Type="String">&#12;</Data></Cell>
+    <Cell><Data ss:Type="String">USTINOV DE BREKKA Z</Data></Cell>
+    <Cell><Data ss:Type="Number">132687</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">27.97</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="Number">4</Data></Cell>
+    <Cell><Data ss:Type="Number">4</Data></Cell>
+    <Cell><Data ss:Type="String">SONIA SANCHEZ HERRERA</Data></Cell>
+    <Cell><Data ss:Type="Number">314069</Data></Cell>
+    <Cell><Data ss:Type="String">PARTICULAR</Data></Cell>
+    <Cell><Data ss:Type="String">&#12;</Data></Cell>
+    <Cell><Data ss:Type="String">JAMAICA YAR</Data></Cell>
+    <Cell><Data ss:Type="Number">139826</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">28.12</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="Number">2</Data></Cell>
+    <Cell><Data ss:Type="Number">5</Data></Cell>
+    <Cell><Data ss:Type="String">MADDI ARRUZA RODRIGUEZ</Data></Cell>
+    <Cell><Data ss:Type="Number">277883</Data></Cell>
+    <Cell><Data ss:Type="String">HIPICA ARETXALDE DE LEZAMA</Data></Cell>
+    <Cell><Data ss:Type="String">&#12;</Data></Cell>
+    <Cell><Data ss:Type="String">CLARIN DE LLAMOSAS</Data></Cell>
+    <Cell><Data ss:Type="Number">128202</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">28.36</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="Number">3</Data></Cell>
+    <Cell><Data ss:Type="Number">6</Data></Cell>
+    <Cell><Data ss:Type="String">NAHIA EGUREN GOÑI</Data></Cell>
+    <Cell><Data ss:Type="Number">197903</Data></Cell>
+    <Cell><Data ss:Type="String">CLUB HIPICO EQUUS GETXO</Data></Cell>
+    <Cell><Data ss:Type="String">&#12;</Data></Cell>
+    <Cell><Data ss:Type="String">CANTERVILLE II</Data></Cell>
+    <Cell><Data ss:Type="Number">112771</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">31.12</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <Selected/>
+   <Panes>
+    <Pane>
+     <Number>3</Number>
+     <ActiveRow>7</ActiveRow>
+     <ActiveCol>8</ActiveCol>
+    </Pane>
+   </Panes>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+</Workbook>
